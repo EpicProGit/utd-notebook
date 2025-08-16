@@ -5,15 +5,15 @@ _What am I_
 ## Contributing
 
 We are always open to contributions to the project. If you would like to contribute and want some guidance on where to start,
-please join our [Discord](http://discord.utdnebula.com/) and ask for drop a message in the `#jupiter-chat` channel or
-DM Ruben for more details.
+please join our [Discord](http://discord.utdnebula.com/) and ask for drop a message in the `#jupiter-general` channel or
+DM Braedon for more details.
 
 Currently, we're tracking all issues via GitHub Issues. If you would like to work on an issue, please comment on the issue and we will assign it to you.
 If you see anything that you think could be improved, please create an issue and we will look into it.
 
 ### Getting Started
 
-Please make sure you have at least [NodeJS v18.0.0](https://nodejs.org/en) or greater installed before continuing.
+Please make sure you have at least [NodeJS v21.1.0](https://nodejs.org/en) or greater installed before continuing.
 
 Start by cloning the repository to your local machine.
 
@@ -46,7 +46,7 @@ openssl rand -hex 32
 
 Jupiter uses an ORM called [Drizzle](https://orm.drizzle.team/) to interact with the database. In order to connect to the database, you will need to add the `DATABASE_URL` variable to your `.env` file.
 
-We're using Supabase as our database provider. You can create a supabase account [here](https://supabase.io/). Once you have created an account, you can create a new project and add the `DATABASE_URL` to your `.env` file. From a Supabase project, you can find the `DATABASE_URL` by navigating to the `Settings` tab and clicking on the `Database` tab.
+We're using Neon as our database provider. You can create a Neon account [here](https://neon.com/). Once you have created an account, you can create a new project and add the `DATABASE_URL` to your `.env` file. From a Neon project, you can find the `DATABASE_URL` by navigating to the `Dashboard` tab and clicking on the `Connect` button.
 
 The Nebula API is used for image storage. The `NEBULA_API_URL` variable should be set to `https://api.utdnebula.com/` and the `NEBULA_API_STORAGE_BUCKET` variable to `jupiter`. An API key and storage key should be requested from the project lead for the `NEBULA_API_KEY` and `NEBULA_API_STORAGE_KEY` variables.
 
