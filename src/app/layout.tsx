@@ -53,7 +53,7 @@ export default function RootLayout({
       >
         {children}
         {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && (
-          <GoogleAnalytics gaId="G-" />
+          <GoogleAnalytics gaId="G-3NDS0P32CZ" />
         )}
       </body>
     </html>
