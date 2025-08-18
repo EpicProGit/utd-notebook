@@ -1,10 +1,12 @@
 import '@src/styles/globals.css';
 
+import { ThemeProvider } from '@mui/material/styles';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Bai_Jamjuree, Inter } from 'next/font/google';
-
 import { type Metadata } from 'next';
-
 import { GoogleAnalytics } from '@next/third-parties/google';
+
+import theme from '@src/utils/theme';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -51,7 +53,9 @@ export default function RootLayout({
       <body
         className={`bg-white dark:bg-black ${inter.variable} font-main ${baiJamjuree.variable} text-haiti dark:text-white`}
       >
-        {children}
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </AppRouterCacheProvider>
         {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && (
           <GoogleAnalytics gaId="G-3NDS0P32CZ" />
         )}
