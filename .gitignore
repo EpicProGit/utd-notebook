@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+# IGNORES FILES WHEN THEY ARE COMMITTED
 # dependencies
+#libraries are stored in here
 /node_modules
 /.pnp
 .pnp.js

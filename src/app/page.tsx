@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-
+//gonna look in hte currentn directory
+import SectionPage from './SectionPage';
 export const metadata: Metadata = {
   alternates: {
     canonical: 'https://notebook.utdnebula.com',
@@ -7,7 +8,12 @@ export const metadata: Metadata = {
 };
 
 const Home = () => {
-  return 'UTD Notebook';
+  return (
+    <div>
+      
+      <SectionPage />
+    </div>
+  );
 };
 
 export default Home;
