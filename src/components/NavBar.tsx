@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 
 export default function NavBar() {
   return (
@@ -10,26 +10,30 @@ export default function NavBar() {
         <Image
           src={'/background.png'}
           alt="background"
-          className="-z-10"
+          className="-z-10 object-cover"
           fill
         />
+
         <Link
           href="/"
           className="font-display flex items-center gap-2 text-lg font-medium md:text-xl md:font-bold"
         >
           UTD Notebook
         </Link>
-        <div className="ml-auto flex gap-x-2 md:gap-x-4">
-          <IconButton size="large" sx={{ p: 0 }}>
-            <div className="relative size-16 flex-shrink-0">
-              <Image
-                src="/icon-white.svg"
-                alt="profile picture"
-                fill
-                className="rounded-full border border-white object-cover"
-              />
-            </div>
-          </IconButton>
+
+        <div className="ml-auto flex items-center gap-x-2 md:gap-x-4">
+          <Tooltip title="Profile">
+            <IconButton size="medium" href="/profile">
+              <div className="relative size-10 flex-shrink-0 md:size-12">
+                <Image
+                  src="/icon-white.svg"
+                  alt="profile picture"
+                  fill
+                  className="rounded-full border-2 border-white object-cover"
+                />
+              </div>
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
     </>
