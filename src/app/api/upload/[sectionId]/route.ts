@@ -1,17 +1,32 @@
 import { NextResponse } from 'next/server';
+
 import fs from 'fs';
 import path from 'path';
 
-export async function POST(req: Request) {
+const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+
+export async function POST(
+  req: Request,
+  { params }: { params: { sectionId: string }}
+) {
 
   const formData = await req.formData();
   const file = formData.get('file') as File;
+
+  const { sectionId } = await params;
 
   if(!file || file.size === 0) {
     return NextResponse.json(
       { message: 'error', data: 'No file attached' },
       { status: 400 }
     );
+  }
+
+  if(!allowedTypes.includes(file.type)) {
+    return NextResponse.json(
+      { message: 'error', data: 'Must be png, jpeg, or pdf'},
+      { status: 400 }
+    )
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
