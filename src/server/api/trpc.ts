@@ -12,7 +12,7 @@ import superjson from 'superjson';
 import { ZodError } from 'zod';
 
 import { getServerAuthSession } from '@src/server/auth';
-import { db } from '@src/server/db';
+import { db } from '@src/server/db/client';
 import { cache } from 'react';
 
 /**

@@ -14,7 +14,14 @@ export const file = pgTable('file', {
   file_url: text('file_url').notNull(),
 });
 
+// REVIEW: Previous definition of relations was incorrect, fixed below
 export const fileRelations = relations(file, ({ one }) => ({
-  author: one(user),
-  section: one(section),
+  author: one(user, {
+    fields: [file.authorId],
+    references: [user.id],
+  }),
+  section: one(section, {
+    fields: [file.sectionId],
+    references: [section.id],
+  }),
 }));

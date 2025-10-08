@@ -7,7 +7,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import DiscordProvider from 'next-auth/providers/discord';
 import { env } from '@src/env.mjs';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { db } from './db';
+import { db } from './db/client';
 import { eq } from 'drizzle-orm';
 import { type SelectUserMetadata, type InsertUserMetadata } from './db/models';
 import { pgTable } from 'drizzle-orm/pg-core';
