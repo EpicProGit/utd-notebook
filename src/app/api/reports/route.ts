@@ -1,22 +1,22 @@
 // This file defines the API route for POST /api/reports
 // It lets logged-in users submit a report for a specific file.
 
-import { NextResponse } from "next/server"; // Used to send HTTP responses (JSON, status codes)
-import { z } from "zod";                    // Zod validates and parses input data
+import { NextResponse } from 'next/server'; // Used to send HTTP responses (JSON, status codes)
+import { z } from 'zod'; // Zod validates and parses input data
 
 // Import database connection and the "report" table schema
-import { db } from "@src/server/db";
-import { report } from "@src/server/db/schema/reports";
+import { db } from '@src/server/db';
+import { report } from '@src/server/db/schema/reports';
 
 // Import session helper to check if a user is logged in
-import { getServerAuthSession } from "@src/server/auth";
+import { getServerAuthSession } from '@src/server/auth';
 
 // This ensures the API only accepts the correct fields
 const CreateReportSchema = z.object({
-  fileId: z.string().min(1), 
+  fileId: z.string().min(1),
   category: z
-    .enum(["inappropriate", "copyright", "spam", "other"])
-    .default("other"),
+    .enum(['inappropriate', 'copyright', 'spam', 'other'])
+    .default('other'),
   details: z.string().min(1),
 });
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
   // If there’s no session or no user ID, reject the request
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Try to parse and validate the incoming request body
@@ -35,8 +35,8 @@ export async function POST(req: Request) {
     body = CreateReportSchema.parse(await req.json());
   } catch (e) {
     return NextResponse.json(
-      { error: "Invalid body", details: (e as Error).message },
-      { status: 400 }
+      { error: 'Invalid body', details: (e as Error).message },
+      { status: 400 },
     );
   }
 
