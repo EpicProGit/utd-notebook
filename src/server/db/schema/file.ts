@@ -11,7 +11,7 @@ export const file = pgTable('file', {
     .notNull()
     .references(() => user.id),
   sectionId: text('section_id').references(() => section.id),
-  file_url: text('file_url').notNull(),
+  file_name: text('file_name').notNull(),
 });
 
 export const fileRelations = relations(file, ({ one }) => ({
