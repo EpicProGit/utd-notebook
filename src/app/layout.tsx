@@ -7,6 +7,7 @@ import { type Metadata } from 'next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 import theme from '@src/utils/theme';
+import { ToastProvider } from "@src/components/toast/ToastProvider";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,7 +55,11 @@ export default function RootLayout({
         className={`bg-white dark:bg-black ${inter.variable} font-main ${baiJamjuree.variable} text-haiti dark:text-white`}
       >
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <ToastProvider>
+              {children}
+            </ToastProvider>
+          </ThemeProvider>
         </AppRouterCacheProvider>
         {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && (
           <GoogleAnalytics gaId="G-3NDS0P32CZ" />
@@ -63,3 +68,4 @@ export default function RootLayout({
     </html>
   );
 }
+
