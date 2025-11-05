@@ -100,7 +100,6 @@ export async function POST(req: Request) {
       file_name: newFile.name,
       file_title: fileTitle,
       file_path: `/uploads/${newFile.name}`,
-      mime_type: newFile.type,
       uploaded_at: new Date(),
     };
 
