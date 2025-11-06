@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import NavBar from '@components/NavBar';
+import UploadNotes from '@components/uploadnotes';
 
 export const metadata: Metadata = {
   alternates: {
@@ -11,6 +12,7 @@ const Home = () => {
   return (
     <>
       <NavBar />
+      <UploadNotes />
     </>
   );
 };
