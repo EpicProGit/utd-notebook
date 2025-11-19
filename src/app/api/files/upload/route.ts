@@ -96,10 +96,10 @@ export async function POST(req: Request) {
     const fileMetadata = {
       authorId: session.user.id,
       sectionId: sectionData.id,
-      file_name: newFile.name,
-      uploaded_at: new Date(),
+      fileTitle: newFile.name,   // required by schema
+      fileName: newFile.name,    // required by schema
     };
-
+    
     const result = await db.insert(file).values(fileMetadata).returning();
 
     return NextResponse.json(
