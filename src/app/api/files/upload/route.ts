@@ -39,7 +39,14 @@ export async function POST(req: Request) {
   }
 
   const data = result.data;
-  const newFile = data.file;
+  const newFile = data.file as File;
+
+  if (!(newFile instanceof File)) {
+    return NextResponse.json(
+      { error: 'Invalid file upload' },
+      { status: 400 },
+    );
+  }
   
   if (newFile.size === 0) {
     return NextResponse.json(
