@@ -74,7 +74,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    // Local file upload
+    // Local file upload - might need to change for production?
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     await fs.promises.mkdir(uploadDir, { recursive: true });
 

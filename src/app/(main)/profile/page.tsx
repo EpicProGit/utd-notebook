@@ -93,6 +93,7 @@ export default async function ProfilePage() {
                     • Uploaded {new Date(f.createdAt).toLocaleString()}
                   </div>
                 </div>
+                {/* This gets from local - might need to change for production release */}
                 <Link
                   href={`/uploads/${f.fileName}`}
                   target="_blank"
