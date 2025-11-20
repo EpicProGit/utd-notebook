@@ -1,7 +1,10 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IconButton, Tooltip } from '@mui/material';
+import { signOut } from "next-auth/react";
 
 export default function NavBar() {
   return (
@@ -20,7 +23,12 @@ export default function NavBar() {
         >
           UTD Notebook
         </Link>
-
+      <button
+        onClick={() => void signOut({ callbackUrl: "/" })}
+        className="bg-red-500 text-white px-3 py-2 rounded"
+      >
+        Sign Out
+      </button>
         <div className="ml-auto flex items-center gap-x-2 md:gap-x-4">
           <Tooltip title="Profile">
             <IconButton size="medium" href="/profile">
