@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button, Stack, Typography } from "@mui/material";
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { Button, Stack, Typography } from '@mui/material';
 
 export default function LoginButtons() {
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <Typography color="white">Loading...</Typography>;
   }
 
@@ -33,13 +33,13 @@ export default function LoginButtons() {
     <Stack spacing={2}>
       <Button
         variant="contained"
-        onClick={() => void signIn("google", {callbackUrl: "/homepage"}) }
+        onClick={() => void signIn('google', { callbackUrl: '/homepage' })}
       >
         Continue with Google
       </Button>
       <Button
         variant="outlined"
-        onClick={() => void signIn("discord", {callbackUrl: "/homepage"})}
+        onClick={() => void signIn('discord', { callbackUrl: '/homepage' })}
       >
         Continue with Discord
       </Button>

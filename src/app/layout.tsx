@@ -59,9 +59,7 @@ export default function RootLayout({
         <AuthProvider>
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
-              <ToastProvider>
-                {children}
-              </ToastProvider>
+              <ToastProvider>{children}</ToastProvider>
             </ThemeProvider>
           </AppRouterCacheProvider>
         </AuthProvider>

@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 export default function UploadNoteForm() {
-
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [prefix, setPrefix] = useState('');

@@ -8,16 +8,13 @@ export const metadata: Metadata = {
 };
 
 const Home = async () => {
-    const session = await getServerAuthSession();
+  const session = await getServerAuthSession();
 
-    // If not logged in, go to login page
-    if (!session?.user) {
-      redirect("/");
-    }
-    return (
-        <>
-        </>
-    );
+  // If not logged in, go to login page
+  if (!session?.user) {
+    redirect('/');
+  }
+  return <></>;
 };
 
 export default Home;
