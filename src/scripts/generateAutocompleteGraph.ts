@@ -1,13 +1,16 @@
 /*
-Build the autocomplete radix tree
+Build the autocomplete radix tree - copied and modified from UTD Trends
 Documentation: https://nebula-labs.atlassian.net/wiki/spaces/TRENDS/pages/67993601/Autocomplete+Documentation
 */
 import { writeFileSync } from 'fs';
 import { DirectedGraph } from 'graphology';
 
-import aggregatedData from '../data/aggregated_data.json';
+import aggregatedDataRaw from '../data/aggregated_data.json';
 import professor_to_alias from '../data/professor_to_alias.json';
 import { decodeSearchQueryLabel, type SearchQuery } from '../types/SearchQuery';
+
+// tell compiler that aggregatedData DOES have data member
+const aggregatedData = aggregatedDataRaw as { data: any[] };
 
 export type NodeAttributes = {
   c: string;
@@ -49,7 +52,7 @@ function addSearchQueryCharacter(
   }
   if (characters.length == 1) {
     const attributes: NodeAttributes = {
-      c: characters[0],
+      c: characters[0] ?? "",
       visited: false,
     };
     if (typeof data !== 'undefined') {
@@ -60,7 +63,7 @@ function addSearchQueryCharacter(
     return newNode;
   }
   const newNode = graph.addNode(numNodes++, {
-    c: characters[0],
+    c: characters[0] ?? "",
     visited: false,
   });
   graph.addEdgeWithKey(numEdges++, node, newNode);
@@ -76,7 +79,7 @@ function addWithParents(
 ) {
   const nodeFirstChar = addSearchQueryCharacter(
     nodes.shift() as string,
-    characters[0],
+    characters[0] ?? "",
     characters.length > 1 ? undefined : data,
   );
   while (nodes.length) {
@@ -122,7 +125,7 @@ function addProfessor(
   const nodes = [root];
   for (const name of firstNames) {
     //push to start, order is specific for addWithParents
-    nodes.unshift(addSearchQueryCharacter(nodes[0], name + ' '));
+    nodes.unshift(addSearchQueryCharacter(nodes[0] ?? "", name + ' '));
   }
   // if it is an alias, map the alias path to the original professor, else, just insert the professor as graph data
   const data = originalProf ?? {
