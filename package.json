@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
+    "fetchdata": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" src/scripts/fetchAggregatedData.ts",
+    "buildautocomplete": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" src/scripts/generateAutocompleteGraph.ts",
     "start": "next start",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

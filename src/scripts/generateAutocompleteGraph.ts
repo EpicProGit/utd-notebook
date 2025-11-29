@@ -1,6 +1,7 @@
 /*
 Build the autocomplete radix tree - copied and modified from UTD Trends
 Documentation: https://nebula-labs.atlassian.net/wiki/spaces/TRENDS/pages/67993601/Autocomplete+Documentation
+To create graph, do npm run buildautocomplete
 */
 import { writeFileSync } from 'fs';
 import { DirectedGraph } from 'graphology';

@@ -1,6 +1,6 @@
 /*
 Fetch the aggregated data from the API
-Taken from UTD Trends
+Taken from UTD Trends; run with npm run fetchdata
 */
 import { writeFileSync } from 'fs';
 import 'dotenv/config';
