@@ -1,3 +1,4 @@
+// build table with: npm run buildcoursenames
 import { writeFileSync } from 'fs';
 
 import aggregatedDataRaw from '../data/aggregated_data.json';
