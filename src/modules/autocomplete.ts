@@ -46,7 +46,7 @@ class PriorityQueue {
   enqueue(queueItem: QueueItem) {
     let contain = false;
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].priority > queueItem.priority) {
+      if (this.items[i]!.priority > queueItem.priority) {
         this.items.splice(i, 0, queueItem);
         contain = true;
         break;

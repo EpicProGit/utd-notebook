@@ -20,7 +20,7 @@ function addCourse(title: string, prefix: string, number: string) {
   if (!Object.prototype.hasOwnProperty.call(table, title)) {
     table[title] = [courseObject];
   } else {
-    table[title].push(courseObject);
+    table[title]!.push(courseObject);
   }
 }
 
