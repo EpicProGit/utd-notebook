@@ -2,12 +2,8 @@
 Fetch the aggregated data from the API
 Taken from UTD Trends
 */
-import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
-import { resolve } from 'path';
-
-const envPath = resolve(__dirname, '../../.env.local');
-config({ path: envPath });
+import 'dotenv/config';
 
 const API_KEY = process.env.NEBULA_API_KEY;
 if (typeof API_KEY !== 'string') {
