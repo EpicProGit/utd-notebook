@@ -1,17 +1,17 @@
 import { relations, sql } from 'drizzle-orm';
 import {
-  pgTable,
-  varchar,
-  text,
   boolean,
-  integer,
-  timestamp,
-  index,
-  uniqueIndex,
   check,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
 } from 'drizzle-orm/pg-core';
-import { user } from './user';
 import { section } from './section';
+import { user } from './user';
 
 export const file = pgTable(
   'file',
@@ -25,25 +25,21 @@ export const file = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }), // Could be 'set null' too, depending on what we want to do with it.
 
-    sectionId: varchar('section_id', { length: 6 })
-      .references(() => section.id, { onDelete: 'set null' }),
+    sectionId: varchar('section_id', { length: 6 }).references(
+      () => section.id,
+      { onDelete: 'set null' },
+    ),
 
-    fileTitle: text('file_title')
-      .notNull(),
+    fileTitle: text('file_title').notNull(),
 
-    fileName: text('file_name')
-      .notNull(),
+    fileName: text('file_name').notNull(),
 
     publishDate: timestamp('publish_date', { withTimezone: true })
       .notNull()
       .defaultNow(),
 
-    likes: integer('likes')
-      .notNull()
-      .default(0),
-    saves: integer('saves')
-      .notNull()
-      .default(0),
+    likes: integer('likes').notNull().default(0),
+    saves: integer('saves').notNull().default(0),
 
     // Edit flag for future workflows
     edited: boolean('edited').notNull().default(false),
@@ -55,7 +51,7 @@ export const file = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (t) => ([
+  (t) => [
     // REVIEW: This is CASE SENSITIVE. File != file similar to Linux.
     // So a user could have "Lecture 1 Notes" and "lecture 1 notes".
     // I would recommend adding a PG extension for to support insensitivity.
@@ -66,7 +62,7 @@ export const file = pgTable(
 
     check('file_likes_nonneg', sql`${t.likes} >= 0`),
     check('file_saves_nonneg', sql`${t.saves} >= 0`),
-  ]),
+  ],
 );
 
 export const fileRelations = relations(file, ({ one }) => ({

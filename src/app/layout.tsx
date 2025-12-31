@@ -1,14 +1,12 @@
 import '@src/styles/globals.css';
-
-import { ThemeProvider } from '@mui/material/styles';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { Bai_Jamjuree, Inter } from 'next/font/google';
-import { type Metadata } from 'next';
+import { ThemeProvider } from '@mui/material/styles';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { type Metadata } from 'next';
+import { Bai_Jamjuree, Inter } from 'next/font/google';
 import Link from 'next/link';
-
-import theme from '@src/utils/theme';
 import { ToastProvider } from '@src/components/toast/ToastProvider';
+import theme from '@src/utils/theme';
 
 const inter = Inter({
   subsets: ['latin'],
