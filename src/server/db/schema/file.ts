@@ -1,17 +1,17 @@
 import { relations, sql } from 'drizzle-orm';
 import {
-  pgTable,
-  varchar,
-  text,
   boolean,
-  integer,
-  timestamp,
-  index,
-  uniqueIndex,
   check,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
 } from 'drizzle-orm/pg-core';
-import { user } from './user';
 import { section } from './section';
+import { user } from './user';
 
 export const file = pgTable(
   'file',

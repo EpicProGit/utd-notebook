@@ -1,14 +1,14 @@
 import { relations, sql } from 'drizzle-orm';
 import {
-  pgTable,
-  pgEnum,
-  smallint,
+  index,
   integer,
-  varchar,
+  pgEnum,
+  pgTable,
+  smallint,
   text,
   timestamp,
   uniqueIndex,
-  index,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import { file } from './file';
 

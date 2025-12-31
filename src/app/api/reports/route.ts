@@ -4,12 +4,11 @@
 import { NextResponse } from 'next/server'; // Used to send HTTP responses (JSON, status codes)
 import { z } from 'zod'; // Zod validates and parses input data
 
+// Import session helper to check if a user is logged in
+import { getServerAuthSession } from '@src/server/auth';
 // Import database connection and the "report" table schema
 import { db } from '@src/server/db';
 import { report } from '@src/server/db/schema/reports';
-
-// Import session helper to check if a user is logged in
-import { getServerAuthSession } from '@src/server/auth';
 
 // This ensures the API only accepts the correct fields
 const CreateReportSchema = z.object({

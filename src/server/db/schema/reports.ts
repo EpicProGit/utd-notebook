@@ -1,9 +1,9 @@
 // Minimal table so API can insert a report.
 
 import { sql } from 'drizzle-orm';
-import { pgTable, text, varchar, timestamp } from 'drizzle-orm/pg-core';
-import { user } from './user';
+import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { file } from './file';
+import { user } from './user';
 
 export const report = pgTable('report', {
   id: text('id')

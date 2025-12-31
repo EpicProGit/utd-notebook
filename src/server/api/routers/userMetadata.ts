@@ -1,9 +1,8 @@
-import { z } from 'zod';
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { eq, sql } from 'drizzle-orm';
-
+import { z } from 'zod';
 import { insertUserMetadata } from '@src/server/db/models';
 import { userMetadata, user as users } from '@src/server/db/schema/user';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 
 const byIdSchema = z.object({ id: z.string().uuid() });
 

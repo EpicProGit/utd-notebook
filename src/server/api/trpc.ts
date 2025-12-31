@@ -8,12 +8,11 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
+import { cache } from 'react';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
-
 import { getServerAuthSession } from '@src/server/auth';
 import { db } from '@src/server/db';
-import { cache } from 'react';
 
 /**
  * 1. CONTEXT
