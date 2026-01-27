@@ -11,7 +11,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { section } from './section';
-import { user } from './user';
+import { userMetadata } from './user';
 
 export const file = pgTable(
   'file',
@@ -23,7 +23,7 @@ export const file = pgTable(
 
     authorId: text('author_id')
       .notNull()
-      .references(() => user.id, { onDelete: 'cascade' }), // Could be 'set null' too, depending on what we want to do with it.
+      .references(() => userMetadata.id, { onDelete: 'cascade' }), // Could be 'set null' too, depending on what we want to do with it.
 
     sectionId: varchar('section_id', { length: 6 }).references(
       () => section.id,
@@ -66,9 +66,9 @@ export const file = pgTable(
 );
 
 export const fileRelations = relations(file, ({ one }) => ({
-  author: one(user, {
+  author: one(userMetadata, {
     fields: [file.authorId],
-    references: [user.id],
+    references: [userMetadata.id],
   }),
   section: one(section, {
     fields: [file.sectionId],

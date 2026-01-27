@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { and, eq } from 'drizzle-orm';
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getServerAuthSession } from '@src/server/auth';
+import { auth } from '@src/server/auth';
 import { db } from '@src/server/db';
 import { file } from '@src/server/db/schema/file';
 
@@ -21,7 +22,9 @@ const uploadFormSchema = z.object({
 
 // Upload file to database w/ file metadata (Local)
 export async function POST(req: Request) {
-  const session = await getServerAuthSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

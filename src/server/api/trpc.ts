@@ -8,10 +8,11 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
+import { headers } from 'next/headers';
 import { cache } from 'react';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
-import { getServerAuthSession } from '@src/server/auth';
+import { auth } from '@src/server/auth';
 import { db } from '@src/server/db';
 
 /**
@@ -30,7 +31,9 @@ import { db } from '@src/server/db';
  */
 export const createTRPCContext = cache(async () => {
   // Fetch stuff that depends on the request
-  const session = await getServerAuthSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return {
     session,
     db,
