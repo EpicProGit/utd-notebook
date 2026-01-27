@@ -5,7 +5,9 @@ import { z } from 'zod';
  * built with invalid env vars.
  */
 const server = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   NEXTAUTH_SECRET:
     process.env.NODE_ENV === 'production'
       ? z.string().min(1)
