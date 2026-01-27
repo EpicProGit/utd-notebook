@@ -1,6 +1,8 @@
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { type personalCats } from '@src/constants/categories';
 import { insertUserMetadata } from '@src/server/db/models';
+import { admin } from '@src/server/db/schema/admin';
 import { user as users } from '@src/server/db/schema/auth';
 import { userMetadata } from '@src/server/db/schema/user';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
@@ -49,4 +51,16 @@ export const userMetadataRouter = createTRPCRouter({
       });
       return await users;
     }),
+  getUserSidebarCapabilities: publicProcedure.query(async ({ ctx }) => {
+    const session = ctx.session;
+    const capabilites: (typeof personalCats)[number][] = [];
+    if (!session) return capabilites;
+    if (
+      await ctx.db.query.admin.findFirst({
+        where: eq(admin.userId, session.user.id),
+      })
+    )
+      capabilites.push('Admin');
+    return capabilites;
+  }),
 });

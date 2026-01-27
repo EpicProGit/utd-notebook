@@ -5,6 +5,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { type Metadata } from 'next';
 import { Bai_Jamjuree, Inter } from 'next/font/google';
 import Link from 'next/link';
+import { RegisterModalProvider } from '@src/components/account/RegisterModalProvider';
 import { ToastProvider } from '@src/components/toast/ToastProvider';
 import theme from '@src/utils/theme';
 
@@ -55,7 +56,9 @@ export default function RootLayout({
       >
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              <RegisterModalProvider>{children}</RegisterModalProvider>
+            </ToastProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
         {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && (
