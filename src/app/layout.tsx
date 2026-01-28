@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-white dark:bg-black ${inter.variable} font-main ${baiJamjuree.variable} text-haiti dark:text-white`}
+        className={`bg-white dark:bg-black ${baiJamjuree.variable} font-[var(--font-display)] text-haiti dark:text-white`}
       >
         <AppRouterCacheProvider>
           <TRPCReactProvider>
