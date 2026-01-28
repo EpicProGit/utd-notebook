@@ -15,10 +15,10 @@ const uploadFormSchema = z.object({
   prefix: z.string().min(1, { message: 'Prefix is missing' }),
   courseNumber: z.string().min(1, { message: 'Course number is missing' }),
   sectionCode: z.string().min(1, { message: 'Section code is missing' }),
-  professor: z.string().min(1 , { message: 'Professor is missing' }),
+  professor: z.string().min(1, { message: 'Professor is missing' }),
   term: z.enum(['Spring', 'Summer', 'Fall']),
-  year: z.coerce.number({ message: 'Year is missing'}),
-})
+  year: z.coerce.number({ message: 'Year is missing' }),
+});
 
 // Upload file to database w/ file metadata (Local)
 export async function POST(req: Request) {
@@ -42,17 +42,11 @@ export async function POST(req: Request) {
   const newFile = data.file as File;
 
   if (!(newFile instanceof File)) {
-    return NextResponse.json(
-      { error: 'Invalid file upload' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'Invalid file upload' }, { status: 400 });
   }
-  
+
   if (newFile.size === 0) {
-    return NextResponse.json(
-      { error: 'File is empty' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'File is empty' }, { status: 400 });
   }
 
   if (!allowedTypes.includes(newFile.type)) {
@@ -76,14 +70,11 @@ export async function POST(req: Request) {
   });
 
   if (!sectionData) {
-    return NextResponse.json(
-      { error: 'Section not found' },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: 'Section not found' }, { status: 404 });
   }
 
   try {
-    // Local file upload
+    // Local file upload - might need to change for production?
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     await fs.promises.mkdir(uploadDir, { recursive: true });
 
@@ -96,10 +87,10 @@ export async function POST(req: Request) {
     const fileMetadata = {
       authorId: session.user.id,
       sectionId: sectionData.id,
-      fileTitle: newFile.name,   // required by schema
-      fileName: newFile.name,    // required by schema
+      fileTitle: newFile.name, // required by schema
+      fileName: newFile.name, // required by schema
     };
-    
+
     const result = await db.insert(file).values(fileMetadata).returning();
 
     return NextResponse.json(
@@ -108,9 +99,6 @@ export async function POST(req: Request) {
     );
   } catch (err) {
     console.error('File upload error:', err);
-    return NextResponse.json(
-      { error: 'File upload failed' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'File upload failed' }, { status: 500 });
   }
 }
