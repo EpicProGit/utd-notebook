@@ -1,6 +1,8 @@
 import { eq, sql } from 'drizzle-orm';
+import { headers } from 'next/headers';
 import { z } from 'zod';
 import { type personalCats } from '@src/constants/categories';
+import { auth } from '@src/server/auth';
 import { insertUserMetadata } from '@src/server/db/models';
 import { admin } from '@src/server/db/schema/admin';
 import { user as users } from '@src/server/db/schema/auth';
@@ -10,7 +12,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 const byIdSchema = z.object({ id: z.string() });
 
 const updateByIdSchema = z.object({
-  updateUser: insertUserMetadata.omit({ id: true }),
+  updateUser: insertUserMetadata.partial().omit({ id: true }),
 });
 const nameSchema = z.object({
   name: z.string().default(''),
@@ -31,10 +33,31 @@ export const userMetadataRouter = createTRPCRouter({
       const { updateUser } = input;
       const { user } = ctx.session;
 
-      await ctx.db
-        .update(userMetadata)
-        .set(updateUser)
-        .where(eq(userMetadata.id, user.id));
+      const updatedUser = (
+        await ctx.db
+          .update(userMetadata)
+          .set(updateUser)
+          .where(eq(userMetadata.id, user.id))
+          .returning()
+      )[0];
+
+      // Update `name` field in BetterAuth user information to match user metadata
+      const name = `${updateUser.firstName} ${updateUser.lastName}`;
+      if (user.name != name) {
+        try {
+          await auth.api.updateUser({
+            body: { name },
+            headers: await headers(),
+          });
+        } catch (e) {
+          console.error(
+            `Unable to update name field for${updateUser.firstName ? ` ${name}'s` : ''} user information`,
+            e,
+          );
+        }
+      }
+
+      return updatedUser!;
     }),
   deleteById: protectedProcedure.mutation(async ({ ctx }) => {
     const { user } = ctx.session;

@@ -1,5 +1,4 @@
 import '@src/styles/globals.css';
-
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -8,6 +7,7 @@ import { Bai_Jamjuree, Inter } from 'next/font/google';
 import { RegisterModalProvider } from '@src/components/account/RegisterModalProvider';
 import { ToastProvider } from '@src/components/toast/ToastProvider';
 import { TRPCReactProvider } from '@src/trpc/react';
+import ClientLocalizationProvider from '@src/utils/localization';
 import theme from '@src/utils/theme';
 
 const inter = Inter({
@@ -58,9 +58,11 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <TRPCReactProvider>
             <ThemeProvider theme={theme}>
-              <ToastProvider>
-                <RegisterModalProvider>{children}</RegisterModalProvider>
-              </ToastProvider>
+              <ClientLocalizationProvider>
+                <ToastProvider>
+                  <RegisterModalProvider>{children}</RegisterModalProvider>
+                </ToastProvider>
+              </ClientLocalizationProvider>
             </ThemeProvider>
           </TRPCReactProvider>
         </AppRouterCacheProvider>
