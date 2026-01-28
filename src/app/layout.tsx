@@ -4,9 +4,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { type Metadata } from 'next';
 import { Bai_Jamjuree, Inter } from 'next/font/google';
-import Link from 'next/link';
 import { RegisterModalProvider } from '@src/components/account/RegisterModalProvider';
 import { ToastProvider } from '@src/components/toast/ToastProvider';
+import { TRPCReactProvider } from '@src/trpc/react';
 import theme from '@src/utils/theme';
 
 const inter = Inter({
@@ -55,20 +55,17 @@ export default function RootLayout({
         className={`bg-white dark:bg-black ${inter.variable} font-main ${baiJamjuree.variable} text-haiti dark:text-white`}
       >
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <ToastProvider>
-              <RegisterModalProvider>{children}</RegisterModalProvider>
-            </ToastProvider>
-          </ThemeProvider>
+          <TRPCReactProvider>
+            <ThemeProvider theme={theme}>
+              <ToastProvider>
+                <RegisterModalProvider>{children}</RegisterModalProvider>
+              </ToastProvider>
+            </ThemeProvider>
+          </TRPCReactProvider>
         </AppRouterCacheProvider>
         {process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && (
           <GoogleAnalytics gaId="G-3NDS0P32CZ" />
         )}
-        <nav>
-          <Link href="/profile" className="px-3 py-1 hover:underline">
-            Profile
-          </Link>
-        </nav>
       </body>
     </html>
   );

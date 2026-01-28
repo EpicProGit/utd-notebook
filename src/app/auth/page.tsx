@@ -20,7 +20,7 @@ export default async function Auth(props: {
       <div className="relative flex h-screen basis-full flex-col items-center justify-center gap-8">
         <div className="fixed inset-0 h-full w-full overflow-hidden">
           <Image
-            src={'/banner.png'}
+            src={'/background.png'}
             alt="background"
             fill
             objectFit="cover"

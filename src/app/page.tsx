@@ -1,4 +1,4 @@
-import Header from '@components/header/BaseHeader';
+import { BaseHeader } from '@components/header/BaseHeader';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const Home = () => {
   return (
     <>
-      <Header />
+      <BaseHeader transparent />
     </>
   );
 };

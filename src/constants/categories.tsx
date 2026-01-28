@@ -1,9 +1,10 @@
 import type { SvgIconComponent } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import GavelIcon from '@mui/icons-material/Gavel';
 import HelpIcon from '@mui/icons-material/Help';
 import HomeIcon from '@mui/icons-material/Home';
 
-export const mainCats = ['Home'] as const;
+export const mainCats = ['Home', 'Create Note'] as const;
 export const moreCats = ['About'] as const;
 export const personalCats = ['Admin'] as const;
 
@@ -16,6 +17,7 @@ export const IconMap: {
 } = {
   Home: HomeIcon,
   About: HelpIcon,
+  'Create Note': AddIcon,
   Admin: GavelIcon,
 };
 
@@ -24,5 +26,6 @@ export const routeMap: {
 } = {
   Home: '/',
   About: 'https://www.utdnebula.com/projects/notebook',
+  'Create Note': '/notes/create',
   Admin: '/admin',
 };

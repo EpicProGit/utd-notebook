@@ -1,5 +1,3 @@
-'use client';
-
 import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
 import Header from '@src/components/header/BaseHeader';
