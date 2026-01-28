@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { env } from '@src/env.mjs';
+import * as admin from './schema/admin';
 import * as auth from './schema/auth';
 import * as file from './schema/file';
 import * as report from './schema/reports';
@@ -12,6 +13,7 @@ const schema = {
   ...user,
   ...report,
   ...auth,
+  ...admin,
 };
 
 export const db = drizzle(env.DATABASE_URL, {

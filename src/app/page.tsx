@@ -1,4 +1,4 @@
-import NavBar from '@components/NavBar';
+import { BaseHeader } from '@components/header/BaseHeader';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const Home = () => {
   return (
     <>
-      <NavBar />
+      <BaseHeader transparent />
     </>
   );
 };
