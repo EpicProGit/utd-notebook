@@ -24,7 +24,7 @@ export default async function Page() {
     <>
       <Header />
       <main className="p-4 flex w-full flex-col items-center">
-        <CreateNoteForm mode="create" />
+        <CreateNoteForm />
       </main>
     </>
   );

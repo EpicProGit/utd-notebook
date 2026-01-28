@@ -3,88 +3,38 @@
 import { TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
 import Panel, { PanelSkeleton } from '@src/components/common/Panel';
 import FormFile from '@src/components/form/FormFile';
 import { useTRPC } from '@src/trpc/react';
-import { type RouterOutputs } from '@src/trpc/shared';
 import { useAppForm } from '@src/utils/form';
-import {
-  createFileFormSchema,
-  editFileFormSchema,
-} from '@src/utils/formSchemas';
+import { createFileFormSchema } from '@src/utils/formSchemas';
 import { useUploadToUploadURL } from '@src/utils/uploadFile';
-
-type FileFormProps =
-  | {
-      mode?: 'create';
-      file?: undefined;
-    }
-  | {
-      mode: 'edit';
-      file: RouterOutputs['file']['byId'];
-    };
 
 interface FileDetails {
   file: File | null;
   name: string;
   description?: string;
+  section: string;
 }
 
-const FileForm = ({ mode = 'create', file }: FileFormProps) => {
+const FileForm = () => {
   const api = useTRPC();
   const createMutation = useMutation(api.file.create.mutationOptions());
   const updateMutation = useMutation(api.file.update.mutationOptions());
   const uploadFile = useUploadToUploadURL();
   const router = useRouter();
 
-  const defaultValues = useMemo(() => {
-    if (mode === 'edit' && file) {
-      const defValues: FileDetails = {
-        file: null,
-        name: file.name,
-        description: file.description ?? undefined,
-      };
-
-      return defValues;
-    }
-
-    const defValues: FileDetails = {
-      file: null,
-      name: '',
-      description: '',
-    };
-
-    return defValues;
-  }, [mode, file]);
+  const defaultValues: FileDetails = {
+    file: null,
+    name: '',
+    description: '',
+    section: '',
+  };
 
   const form = useAppForm({
     defaultValues,
     onSubmit: async ({ value, formApi }) => {
       const { file: removedFile, ...rest } = value;
-      if (mode === 'edit' && file) {
-        // File upload for URL
-        let fileUrl = file.publicUrl;
-        const isFileIsDirty = !formApi.getFieldMeta('file')?.isDefaultValue;
-        if (isFileIsDirty) {
-          const url = await uploadFile.mutateAsync({
-            file: removedFile,
-            fileName: file.id,
-          });
-          fileUrl = url;
-        }
-
-        return updateMutation.mutateAsync(
-          {
-            id: file.id,
-            ...rest,
-            file: fileUrl,
-          },
-          {
-            onSuccess: () => router.push(`/notes/${file.id}`),
-          },
-        );
-      }
 
       // Create
       return createMutation.mutateAsync(
@@ -122,7 +72,7 @@ const FileForm = ({ mode = 'create', file }: FileFormProps) => {
       );
     },
     validators: {
-      onChange: mode === 'create' ? createFileFormSchema : editFileFormSchema,
+      onChange: createFileFormSchema,
     },
   });
 
@@ -133,6 +83,7 @@ const FileForm = ({ mode = 'create', file }: FileFormProps) => {
         e.stopPropagation();
         form.handleSubmit();
       }}
+      className="w-full max-w-6xl"
     >
       <Panel
         heading="Create New Note"
@@ -212,6 +163,26 @@ const FileForm = ({ mode = 'create', file }: FileFormProps) => {
                     </span>
                   )
                 }
+              />
+            )}
+          </form.Field>
+          <form.Field name="section">
+            {(field) => (
+              <TextField
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                className="[&>.MuiInputBase-root]:bg-white dark:[&>.MuiInputBase-root]:bg-neutral-900"
+                size="small"
+                error={!field.state.meta.isValid}
+                helperText={
+                  !field.state.meta.isValid
+                    ? field.state.meta.errors
+                        .map((err) => err?.message)
+                        .join('. ') + '.'
+                    : undefined
+                }
+                label="Section"
               />
             )}
           </form.Field>

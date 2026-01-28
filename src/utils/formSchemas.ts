@@ -13,6 +13,9 @@ const fileSchema = z
     'Max image size is 5MB',
   );
 
+const sectionRegex =
+  /^[A-Z]{2,4} [A-Z0-9]{4}.[A-Z0-9]{3} (Spring|Summer|Fall) [0-9]{4}$/;
+
 export const createFileFormSchema = z.object({
   file: fileSchema,
   name: z
@@ -20,6 +23,7 @@ export const createFileFormSchema = z.object({
     .min(3, 'Name must be at least 3 characters')
     .max(100, 'Character limit reached'),
   description: z.string().max(1000, 'Character limit reached').optional(),
+  section: z.string().regex(sectionRegex, 'Section must follow format'),
 });
 
 export const createFileSchema = z.object({
@@ -28,6 +32,7 @@ export const createFileSchema = z.object({
     .min(3, 'Name must be at least 3 characters')
     .max(100, 'Character limit reached'),
   description: z.string().max(1000, 'Character limit reached').optional(),
+  section: z.string().regex(sectionRegex, 'Section must follow format'),
 });
 
 export const editFileFormSchema = z.object({
