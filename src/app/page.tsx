@@ -76,4 +76,4 @@ export default function Home() {
       </div>
     </main>
   );
-}git commit -m "feat(homepage): polish layout and footer"git commit -m "feat(homepage): polish layout and footer"
+}
