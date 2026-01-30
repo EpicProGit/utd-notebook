@@ -17,8 +17,8 @@ const inter = Inter({
 
 const baiJamjuree = Bai_Jamjuree({
   subsets: ['latin'],
-  weight: ['500', '700'],
-  variable: '--font-display',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-white dark:bg-black ${baiJamjuree.variable} font-[var(--font-display)] text-haiti dark:text-white`}
+        className={`bg-white dark:bg-black ${baiJamjuree.className} text-haiti dark:text-white`}
       >
         <AppRouterCacheProvider>
           <TRPCReactProvider>
