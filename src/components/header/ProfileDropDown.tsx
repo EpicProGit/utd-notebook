@@ -15,7 +15,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useRegisterModal } from '@src/components/account/RegisterModalProvider';
+import { useRegisterModal } from '@src/components/global/RegisterModalProvider';
 import { authClient } from '@src/utils/auth-client';
 
 type Props = {
