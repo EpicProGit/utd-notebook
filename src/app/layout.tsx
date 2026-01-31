@@ -10,6 +10,7 @@ import { TRPCReactProvider } from '@src/trpc/react';
 import ClientLocalizationProvider from '@src/utils/localization';
 import theme from '@src/utils/theme';
 
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
