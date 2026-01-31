@@ -13,13 +13,13 @@ import theme from '@src/utils/theme';
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-main',
 });
 
 const baiJamjuree = Bai_Jamjuree({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
+  weight: ['500', '700'],
+  variable: '--font-display',
 });
 
 export const metadata: Metadata = {
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-white dark:bg-black ${baiJamjuree.className} text-haiti dark:text-white`}
+        className={`bg-light dark:bg-dark ${inter.variable} font-main ${baiJamjuree.variable} text-haiti dark:text-white`}
       >
         <AppRouterCacheProvider>
           <TRPCReactProvider>

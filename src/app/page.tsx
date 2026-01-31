@@ -13,6 +13,7 @@ export default function Home() {
 
       <div className="relative z-30">
         <BaseHeader
+          shadow
           transparent
           disableSticky
           color="light"
@@ -35,16 +36,16 @@ export default function Home() {
               rel="noopener"
               className="flex items-center gap-1"
             >
-              <NebulaLogo className="h-4 w-auto fill-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]" />
+              <NebulaLogo className="font-display h-4 w-auto fill-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]" />
               <span>NEBULA LABS</span>
             </a>
           </h2>
 
-          <h1 className="mb-4 max-w-3xl px-5 text-center text-3xl font-semibold text-white md:px-0 md:text-6xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+          <h1 className="font-display mb-4 max-w-3xl px-5 text-center text-3xl font-semibold text-white md:px-0 md:text-6xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
             UTD NOTEBOOK
           </h1>
 
-          <p className="mb-10 max-w-2xl text-white text-base md:text-lg drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]">
+          <p className="font-display mb-10 max-w-2xl text-white text-base md:text-lg drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]">
             Share and access course notes. By students, for students.
           </p>
 
