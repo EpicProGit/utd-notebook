@@ -6,7 +6,7 @@ import {
   moreCats,
   type personalCats,
 } from '@src/constants/categories';
-import NebulaLogo from '@src/icons/NebulaLogo';
+import { UTDNotebookLogoCombination } from '@src/icons/UTDNotebookLogo';
 import SidebarItems from './SidebarItems';
 
 type NavMenuProps = {
@@ -19,7 +19,14 @@ const NavMenu = ({ userCapabilites }: NavMenuProps) => {
       {/* Logo Section */}
       <div className="flex w-full justify-center pt-14 pb-14">
         <Link className="flex items-center gap-2" href="/">
-          <NebulaLogo className="h-12 w-auto fill-haiti dark:fill-white" />
+          <UTDNotebookLogoCombination
+            duotone
+            className="h-16 w-auto"
+            slotClassNames={{
+              nebulaLogo: 'fill-haiti dark:fill-white',
+              projectLogo: 'fill-royal dark:fill-cornflower-300',
+            }}
+          />
           <h1 className="font-display text-2xl font-bold">UTD NOTEBOOK</h1>
         </Link>
       </div>

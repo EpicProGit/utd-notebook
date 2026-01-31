@@ -70,12 +70,14 @@ export default function Home() {
               fullWidth
               placeholder="Search for courses or professors"
               variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon sx={{ color: "#AC99DB" }} />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  endAdornment: [
+                    <InputAdornment position="end" key="search-icon">
+                      <SearchIcon sx={{ color: "#AC99DB" }} />
+                    </InputAdornment>,
+                  ],
+                },
               }}
               sx={{
                 "& .MuiInputBase-input": {
