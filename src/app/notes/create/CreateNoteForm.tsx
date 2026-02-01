@@ -119,24 +119,24 @@ const FileForm = () => {
                 multiline
                 minRows={4}
                 helperText={
-                  field.state.meta.isValid
-                    ? (
-                        <span>
-                          We support{' '}
-                          <a
-                            href="https://www.markdownguide.org/basic-syntax/"
-                            rel="noreferrer"
-                            target="_blank"
-                            className="text-royal dark:text-cornflower-300 underline"
-                          >
-                            Markdown
-                          </a>
-                          !
-                        </span>
-                      )
-                    : field.state.meta.errors
-                        .map((err) => err?.message)
-                        .join('. ') + '.'
+                  field.state.meta.isValid ? (
+                    <span>
+                      We support{' '}
+                      <a
+                        href="https://www.markdownguide.org/basic-syntax/"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="text-royal dark:text-cornflower-300 underline"
+                      >
+                        Markdown
+                      </a>
+                      !
+                    </span>
+                  ) : (
+                    field.state.meta.errors
+                      .map((err) => err?.message)
+                      .join('. ') + '.'
+                  )
                 }
               />
             )}
