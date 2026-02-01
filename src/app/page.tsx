@@ -1,96 +1,69 @@
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Header from '@src/components/header/Header';
+import NebulaLogo from '@src/icons/NebulaLogo';
 
-import { BaseHeader } from "@src/components/header/BaseHeader";
-import NebulaLogo from "@src/icons/NebulaLogo";
-
-const Home = async () => {
+const Home = () => {
   return (
-    <main className="relative h-screen w-full overflow-hidden">
+    <main className="relative">
       <div className="absolute inset-0 z-0">
-        <div className="relative h-full w-full">
+        <div className="relative h-screen">
           <div className="absolute inset-0 bg-[linear-gradient(106deg,#C0C2FF_13.64%,#DDBBF3_48.08%,#FFC6C1_83.43%)]" />
-          <div className="absolute inset-0 dark:bg-black/40" />
+          <div className="absolute inset-0 dark:bg-slightly-darken" />
         </div>
       </div>
 
       <div className="relative inset-0 z-20 bg-transparent">
-        <BaseHeader
-          shadow
+        <Header
           transparent
+          shadow
           disableSticky
+          className="lg:fixed"
+          itemVisibility={{ search: false }}
           color="light"
-          itemVisibility={{
-            menu: true,
-            logo: true,
-            children: false,
-            account: true,
-          }}
         />
 
-        <section className="flex h-screen items-center justify-center px-4">
-          <div className="flex flex-col items-center text-center translate-y-[-2%]">
-            <h2 className="mb-3 flex items-center gap-1 text-sm font-semibold tracking-wider text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]">
-              <span>POWERED BY</span>
+        <section className="h-screen">
+          <div className="flex h-full w-full flex-col items-center justify-center overflow-visible">
+            <h2 className="mb-3 flex items-center gap-1 text-sm font-semibold tracking-wider text-white text-shadow-[0_0_4px_rgb(0_0_0_/_0.4)]">
+              <span className="leading-none">POWERED BY</span>
               <a
                 href="https://www.utdnebula.com/"
                 target="_blank"
                 rel="noopener"
-                className="flex items-center gap-1"
+                className="group flex items-center gap-1"
               >
-                <NebulaLogo className="h-4 w-auto fill-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]" />
-                <span>NEBULA LABS</span>
+                <NebulaLogo className="h-4 w-auto fill-white drop-shadow-[0_0_4px_rgb(0_0_0_/_0.4)]" />
+                <span className="border-y-2 border-transparent leading-none transition group-hover:border-b-inherit group-hover:underline">
+                  NEBULA LABS
+                </span>
               </a>
             </h2>
 
-            <h1 className="font-display mb-4 max-w-3xl px-5 text-center text-3xl font-semibold text-white md:px-0 md:text-6xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+            <h1 className="font-display mb-4 max-w-3xl px-5 text-center text-6xl font-extrabold text-white text-shadow-[0_0_16px_rgb(0_0_0_/_0.4)]">
               UTD NOTEBOOK
             </h1>
 
-            <p className="font-display mb-10 max-w-2xl text-white text-base md:text-lg drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]">
+            <p className="mb-10 text-white text-base md:text-lg text-shadow-[0_0_4px_rgb(0_0_0_/_0.4)]">
               Share and access course notes. By students, for students.
             </p>
 
-            <div
-              className={[
-                "w-full max-w-[600px]",
-                "[&_.MuiInputBase-root]:bg-white/70",
-                "dark:[&_.MuiInputBase-root]:bg-black/55",
-                "[&_.MuiOutlinedInput-root]:rounded-full",
-                "[&_.MuiOutlinedInput-notchedOutline]:rounded-full",
-                "[&_.MuiOutlinedInput-notchedOutline]:border-transparent",
-                "[&_.MuiOutlinedInput-notchedOutline]:border-[3px]",
-                "hover:[&_.MuiOutlinedInput-notchedOutline]:border-[#7C60BF]",
-                "focus-within:[&_.MuiOutlinedInput-notchedOutline]:border-[#7C60BF]",
-                "[&_.MuiInputBase-input]:text-[#7C60BF]",
-                "dark:[&_.MuiInputBase-input]:text-white",
-                "[&_.MuiInputBase-input::placeholder]:text-[#7C60BF]/80",
-                "dark:[&_.MuiInputBase-input::placeholder]:text-white/70",
-                "drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)]",
-              ].join(" ")}
-            >
-              <TextField
-                fullWidth
-                placeholder="Search for courses or professors"
-                variant="outlined"
-                slotProps={{
-                  input: {
-                    endAdornment: [
-                      <InputAdornment position="end" key="search-icon">
-                        <SearchIcon sx={{ color: "#AC99DB" }} />
-                      </InputAdornment>,
-                    ],
-                  },
-                }}
-                sx={{
-                  "& .MuiInputBase-input": {
-                    paddingY: "14px",
-                    fontWeight: 500,
-                  },
-                }}
-              />
-            </div>
+            <TextField
+              placeholder="Search for courses or professors"
+              variant="outlined"
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" key="search-icon">
+                      <SearchIcon className="text-royal dark:text-cornflower-300" />
+                    </InputAdornment>
+                  ),
+                  className: 'rounded-full bg-white dark:bg-neutral-800',
+                },
+              }}
+              className="w-full max-w-xs md:max-w-sm lg:max-w-md"
+            />
           </div>
         </section>
       </div>
