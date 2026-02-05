@@ -1,6 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { db } from '@src/server/db/client';
 import { eq } from 'drizzle-orm';
+import { db } from '@src/server/db';
+import { type InsertClub } from '@src/server/db/models';
+import { club } from '@src/server/db/schema';
 
 /* NOTE: Example test file. Had to comment out due to runtime errors. Code was just copied from Jupiter I believe.
 describe('This should create a club on supabase', () => {

@@ -1,5 +1,5 @@
-import { addMinutes } from 'date-fns';
 import 'server-only';
+import { addMinutes } from 'date-fns';
 
 type GetPostResponse = {
   bucket: string;
@@ -11,6 +11,7 @@ type GetPostResponse = {
   media_link: string;
   created: string;
   updated: string;
+  public_url: string;
 };
 
 type DeleteResponse = 1;
@@ -28,24 +29,24 @@ type APIResponse<T> =
     };
 export async function callStorageAPI(
   method: 'GET',
-  objectID: string,
+  objectId: string,
 ): Promise<APIResponse<GetPostResponse>>;
 export async function callStorageAPI(
   method: 'POST',
-  objectID: string,
+  objectId: string,
   body: Blob,
 ): Promise<APIResponse<GetPostResponse>>;
 export async function callStorageAPI(
   method: 'DELETE',
-  objectID: string,
+  objectId: string,
 ): Promise<APIResponse<DeleteResponse>>;
 export async function callStorageAPI<T>(
   method: 'GET' | 'POST' | 'DELETE',
-  objectID: string,
+  objectId: string,
   body?: Blob,
 ): Promise<APIResponse<T>> {
   const res = await fetch(
-    `${process.env.NEBULA_API_URL}/storage/${process.env.NEBULA_API_STORAGE_BUCKET}/${objectID}`,
+    `${process.env.NEBULA_API_URL}/storage/${process.env.NEBULA_API_STORAGE_BUCKET}/${objectId}`,
     {
       method,
       headers: {
@@ -61,9 +62,9 @@ export async function callStorageAPI<T>(
   return data;
 }
 
-export async function getUploadURL(objectID: string, type: string) {
+export async function getUploadURL(objectId: string, type: string) {
   const res = await fetch(
-    `${process.env.NEBULA_API_URL}/storage/${process.env.NEBULA_API_STORAGE_BUCKET}/${objectID}`,
+    `${process.env.NEBULA_API_URL}/storage/${process.env.NEBULA_API_STORAGE_BUCKET}/${objectId}/url`,
     {
       method: 'PUT',
       headers: {
@@ -73,8 +74,8 @@ export async function getUploadURL(objectID: string, type: string) {
       body: JSON.stringify({
         expiration: addMinutes(Date.now(), 5),
         headers: [
-          `Content-type:${type}`,
-          `x-goog-content-length-range:0,${1000000}`,
+          `content-type:${type}`,
+          `x-goog-content-length-range:0,5000000`,
         ],
         method: 'PUT',
       }),
