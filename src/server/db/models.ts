@@ -1,18 +1,9 @@
-import { z } from 'zod';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { type z } from 'zod';
+import { z } from 'zod';
 import { user } from './schema/auth';
 import { file } from './schema/file';
 import { userMetadata } from './schema/user';
 import { section } from './schema/section';
-import { file } from './schema/file';
-
-// Schema definition for file table
-export const insertFile = createInsertSchema(file);
-export const selectFile = createSelectSchema(file);
-
-export type InsertFile = z.infer<typeof insertFile>;
-export type SelectFile = typeof file.$inferSelect;
 
 // Schema definition for user table
 export const insertUser = createInsertSchema(user);

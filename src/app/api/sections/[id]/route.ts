@@ -1,7 +1,7 @@
 // NOTE: API route that isn't required for the section page, however, useful for fetching section data if needed
 
 import { NextResponse } from 'next/server';
-import { db } from '@src/server/db/client';
+import { db } from '@src/server/db';
 import { section } from '@src/server/db/schema/section';
 import { eq } from 'drizzle-orm';
 import { sectionWithFiles } from '@src/server/db/models';

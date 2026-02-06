@@ -1,7 +1,7 @@
 // API route to seed the database with demo data made by ChatGPT for testing
 
 import { NextResponse } from 'next/server';
-import { db } from '@src/server/db/client';
+import { db } from '@src/server/db';
 import { section } from '@src/server/db/schema/section';
 import { file } from '@src/server/db/schema/file';
 import { user } from '@src/server/db/schema/user';
