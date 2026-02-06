@@ -30,7 +30,7 @@ const pickLatestSection = <T extends SelectSection>(sections: T[]) => {
 
 const mockSections: SectionWithFiles[] = [
   {
-    id: '1',
+    id: 'mock-ce-1337-001',
     prefix: 'CE',
     number: '1337',
     sectionCode: '001',
@@ -42,7 +42,7 @@ const mockSections: SectionWithFiles[] = [
       {
         id: 'mock-file-ce-01',
         authorId: 'Temoc',
-        sectionId: '1',
+        sectionId: 'mock-ce-1337-001',
         name: 'Lecture 01 - Signals',
         description: 'Intro notes on signals and systems.',
         publicUrl: 'https://www.utdallas.edu/',
@@ -51,7 +51,7 @@ const mockSections: SectionWithFiles[] = [
       {
         id: 'mock-file-ce-02',
         authorId: 'Temoc',
-        sectionId: '1',
+        sectionId: 'mock-ce-1337-001',
         name: 'Homework 1 Solutions',
         description: 'Worked solutions and extra exercises.',
         publicUrl: 'https://www.utdallas.edu/',
@@ -60,7 +60,7 @@ const mockSections: SectionWithFiles[] = [
     ],
   },
   {
-    id: '2',
+    id: 'mock-ce-1337-002',
     prefix: 'CE',
     number: '1337',
     sectionCode: '002',
@@ -72,7 +72,7 @@ const mockSections: SectionWithFiles[] = [
       {
         id: 'mock-file-ce-03',
         authorId: 'Student-42',
-        sectionId: '2',
+        sectionId: 'mock-ce-1337-002',
         name: 'Lab 2 Checklist',
         description: 'Checklist and tips for lab submissions.',
         publicUrl: 'https://www.utdallas.edu/',
@@ -81,7 +81,7 @@ const mockSections: SectionWithFiles[] = [
     ],
   },
   {
-    id: '3',
+    id: 'mock-ce-2426-001',
     prefix: 'CE',
     number: '2426',
     sectionCode: '001',
@@ -92,7 +92,7 @@ const mockSections: SectionWithFiles[] = [
     files: [],
   },
   {
-    id: '4',
+    id: 'mock-ee-1200-001',
     prefix: 'EE',
     number: '1200',
     sectionCode: '001',
@@ -104,7 +104,7 @@ const mockSections: SectionWithFiles[] = [
       {
         id: 'mock-file-ee-01',
         authorId: 'Temoc',
-        sectionId: '4',
+        sectionId: 'mock-ee-1200-001',
         name: 'Exam 1 Review',
         description: 'Key formulas and practice problems.',
         publicUrl: 'https://www.utdallas.edu/',
@@ -113,7 +113,7 @@ const mockSections: SectionWithFiles[] = [
     ],
   },
   {
-    id: '5',
+    id: 'mock-ee-2301-001',
     prefix: 'EE',
     number: '2301',
     sectionCode: '001',
