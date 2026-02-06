@@ -39,7 +39,6 @@ export const file = pgTable(
   ],
 );
 
-// REVIEW: Previous definition of relations was incorrect, fixed below
 export const fileRelations = relations(file, ({ one }) => ({
   author: one(userMetadata, {
     fields: [file.authorId],

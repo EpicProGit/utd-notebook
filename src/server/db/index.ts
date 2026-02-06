@@ -1,5 +1,3 @@
-// REVIEW: I believe naming this client.ts makes more sense than index.ts
-
 import { drizzle } from 'drizzle-orm/neon-http';
 import { env } from '@src/env.mjs';
 import * as admin from './schema/admin';
