@@ -1,7 +1,7 @@
-import EmptyStateCard from '../_components/EmptyStateCard';
-import LinkCard from '../_components/LinkCard';
-import SectionHeader from '../_components/SectionHeader';
-import { getSectionNumbersByPrefix } from '../_data/sections';
+import EmptyStateCard from '@src/components/sections/EmptyStateCard';
+import LinkCard from '@src/components/sections/LinkCard';
+import SectionHeader from '@src/components/sections/SectionHeader';
+import { getSectionNumbersByPrefix } from '@src/utils/section';
 
 type PrefixPageProps = {
   params: Promise<{ prefix: string }>;
@@ -18,13 +18,8 @@ export default async function PrefixPage({ params }: PrefixPageProps) {
         eyebrow="Prefix"
         title={normalizedPrefix}
         description="Choose a course number to explore available sections."
-        metaLabel={`${numbers.length} courses${
-          numbers.length === 1 ? '' : 's'
-        }`}
-        breadcrumbs={[
-          { label: 'Sections' },
-          { label: normalizedPrefix },
-        ]}
+        metaLabel={`${numbers.length} course${numbers.length === 1 ? '' : 's'}`}
+        breadcrumbs={[{ label: 'Sections' }, { label: normalizedPrefix }]}
       />
 
       {numbers.length === 0 ? (

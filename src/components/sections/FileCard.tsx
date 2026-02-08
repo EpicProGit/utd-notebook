@@ -1,8 +1,11 @@
-"use client"
+'use client';
+
+import { useThumbnails, type FileData } from '@mkholt/pdf-thumbnail';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
-import { type FileData, useThumbnails } from '@mkholt/pdf-thumbnail';
 
 type FileCardProps = {
   file: SelectFile;
@@ -26,41 +29,39 @@ export default function FileCard({ file }: FileCardProps) {
   );
   const thumbnails = useThumbnails(files) as Array<{ thumbData?: string }>;
   const thumbData = thumbnails[0]?.thumbData;
-  const [showUnavailable, setShowUnavailable] = useState(false);
+  const [hasTimedOut, setHasTimedOut] = useState(false);
 
   useEffect(() => {
-    if (thumbData) {
-      setShowUnavailable(false);
-      return;
-    }
+    if (thumbData) return;
 
     const timeout = window.setTimeout(() => {
-      setShowUnavailable(true);
+      setHasTimedOut(true);
     }, 1500);
 
     return () => window.clearTimeout(timeout);
   }, [thumbData]);
+  const showUnavailable = !thumbData && hasTimedOut;
 
   return (
-    <BaseCard
-      variant="interactive"
-      className="group h-full border border-white/40 bg-white/90 backdrop-blur dark:border-white/10 dark:bg-neutral-900/90"
-    >
-      <a
+    <BaseCard variant="interactive" className="h-full">
+      <Link
         href={file.publicUrl}
         target="_blank"
         rel="noreferrer"
         className="flex h-full flex-col gap-3 p-4"
       >
-        <div
-          className="overflow-hidden rounded-md border border-slate-200/70 bg-slate-50 shadow-sm dark:border-white/10 dark:bg-white/5"
-        >
+        <div className="overflow-hidden rounded-md border border-slate-200/70 bg-slate-50 shadow-sm dark:border-white/10 dark:bg-white/5">
           {thumbData ? (
-            <img
-              src={thumbData}
-              alt={`${file.name} preview`}
-              className="aspect-[3/4] w-full object-cover"
-            />
+            <div className="relative aspect-[3/4] w-full">
+              <Image
+                src={thumbData}
+                alt={`${file.name} preview`}
+                fill
+                sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+                className="object-cover"
+                unoptimized
+              />
+            </div>
           ) : showUnavailable ? (
             <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-500 dark:text-slate-400">
               Unable to preview
@@ -72,27 +73,27 @@ export default function FileCard({ file }: FileCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3
-              className="truncate text-lg font-semibold text-haiti dark:text-white"
+              className="line-clamp-1 text-lg font-semibold" // line-clamp-2 looks slightly too full, might want to restructure the card.
               title={file.name}
             >
               {file.name}
             </h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
               Uploaded by {file.authorId}
             </p>
           </div>
         </div>
 
         {file.description && (
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="line-clamp-2 text-sm text-slate-800 dark:text-slate-200">
             {file.description}
           </p>
         )}
 
-        <div className="mt-auto text-xs text-slate-500 dark:text-slate-400">
+        <div className="mt-auto text-xs text-slate-600 dark:text-slate-400">
           Updated {formatUpdatedAt(file.updatedAt)}
         </div>
-      </a>
+      </Link>
     </BaseCard>
   );
 }

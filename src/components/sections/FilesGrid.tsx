@@ -1,6 +1,6 @@
 import { BaseCard } from '@src/components/common/BaseCard';
-import FileCard from './FileCard';
 import type { SectionWithFiles } from '@src/server/db/models';
+import FileCard from './FileCard';
 
 type FilesGridProps = {
   files: SectionWithFiles['files'];

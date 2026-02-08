@@ -2,8 +2,8 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { user } from './schema/auth';
 import { file } from './schema/file';
-import { userMetadata } from './schema/user';
 import { section } from './schema/section';
+import { userMetadata } from './schema/user';
 
 // Schema definition for user table
 export const insertUser = createInsertSchema(user);

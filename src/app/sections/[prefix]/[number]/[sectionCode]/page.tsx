@@ -1,7 +1,7 @@
-import EmptyStateCard from '../../../_components/EmptyStateCard';
-import FilesGrid from '../../../_components/FilesGrid';
-import SectionHeader from '../../../_components/SectionHeader';
-import { getSectionDetail } from '../../../_data/sections';
+import EmptyStateCard from '@src/components/sections/EmptyStateCard';
+import FilesGrid from '@src/components/sections/FilesGrid';
+import SectionHeader from '@src/components/sections/SectionHeader';
+import { getSectionDetail } from '@src/utils/section';
 
 type SectionCodePageProps = {
   params: Promise<{ prefix: string; number: string; sectionCode: string }>;

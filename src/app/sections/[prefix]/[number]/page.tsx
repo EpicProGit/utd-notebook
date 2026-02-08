@@ -1,7 +1,7 @@
-import EmptyStateCard from '../../_components/EmptyStateCard';
-import LinkCard from '../../_components/LinkCard';
-import SectionHeader from '../../_components/SectionHeader';
-import { getSectionCodesByNumber } from '../../_data/sections';
+import EmptyStateCard from '@src/components/sections/EmptyStateCard';
+import LinkCard from '@src/components/sections/LinkCard';
+import SectionHeader from '@src/components/sections/SectionHeader';
+import { getSectionCodesByNumber } from '@src/utils/section';
 
 type NumberPageProps = {
   params: Promise<{ prefix: string; number: string }>;

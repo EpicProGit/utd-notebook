@@ -35,7 +35,7 @@ export default function SectionHeader({
           {title}
         </h1>
         {description && (
-          <p className="max-w-2xl text-sm text-white/85 md:text-base">
+          <p className="max-w-2xl text-sm text-slate-800 dark:text-slate-200 md:text-base">
             {description}
           </p>
         )}
@@ -55,8 +55,8 @@ export default function SectionHeader({
 
       {metaLabel && (
         <BaseCard className="w-fit bg-white/85 dark:bg-neutral-900/85 backdrop-blur px-4 py-2">
-          <div className="flex items-center gap-2 text-sm font-semibold text-haiti dark:text-white">
-            <span className="h-2 w-2 rounded-full bg-cornflower-500" />
+          <div className="flex items-center gap-2 text-sm font-semibold">
+            <span className="h-2 w-2 rounded-full bg-royal dark:bg-cornflower-300" />
             <span>{metaLabel}</span>
           </div>
         </BaseCard>
