@@ -110,12 +110,13 @@ const FileForm = () => {
             )}
           </form.AppField>
           <form.AppField name="name">
-            {(field) => <field.TextField label="Name" />}
+            {(field) => <field.TextField label="Name" className="w-full" />}
           </form.AppField>
           <form.AppField name="description">
             {(field) => (
               <field.TextField
                 label="Description"
+                className="w-full"
                 multiline
                 minRows={4}
                 helperText={
@@ -142,7 +143,7 @@ const FileForm = () => {
             )}
           </form.AppField>
           <form.AppField name="section">
-            {(field) => <field.TextField label="Section" />}
+            {(field) => <field.TextField label="Section" className="w-full" />}
           </form.AppField>
         </div>
         <div className="flex flex-wrap justify-end items-center gap-2">
