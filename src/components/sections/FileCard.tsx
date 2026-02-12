@@ -1,9 +1,10 @@
 'use client';
 
 import { useThumbnails, type FileData } from '@mkholt/pdf-thumbnail';
+import { Skeleton } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
 
@@ -27,20 +28,25 @@ export default function FileCard({ file }: FileCardProps) {
     () => [{ file: thumbnailUrl, name: file.name }],
     [file.name, thumbnailUrl],
   );
-  const thumbnails = useThumbnails(files) as Array<{ thumbData?: string }>;
+
+  const { thumbnails, isLoading } = useThumbnails(files);
   const thumbData = thumbnails[0]?.thumbData;
-  const [hasTimedOut, setHasTimedOut] = useState(false);
+  const fetched = useRef(false);
 
+  /*
+    !isLoading does not mean thumbData is not null.
+    Even with no errors and isLoading, takes a few rerenders to populate thumbData.
+    On mount, isLoading is false and thumbData is null. 
+    So we want to wait for the first fetch to trigger (indicated by isLoading turning true)
+    before showing "Unable to preview".
+    useThumbnails.error has always been null in testing,
+    so we won't rely on that for error handling.
+  */
   useEffect(() => {
-    if (thumbData) return;
-
-    const timeout = window.setTimeout(() => {
-      setHasTimedOut(true);
-    }, 1500);
-
-    return () => window.clearTimeout(timeout);
-  }, [thumbData]);
-  const showUnavailable = !thumbData && hasTimedOut;
+    if (!fetched.current) {
+      fetched.current = true;
+    }
+  }, [isLoading]);
 
   return (
     <BaseCard variant="interactive" className="h-full">
@@ -50,7 +56,7 @@ export default function FileCard({ file }: FileCardProps) {
         rel="noreferrer"
         className="flex h-full flex-col gap-3 p-4"
       >
-        <div className="overflow-hidden rounded-md border border-slate-200/70 bg-slate-50 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <div className="overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 bg-slate-50 shadow-sm">
           {thumbData ? (
             <div className="relative aspect-[3/4] w-full">
               <Image
@@ -62,12 +68,14 @@ export default function FileCard({ file }: FileCardProps) {
                 unoptimized
               />
             </div>
-          ) : showUnavailable ? (
-            <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-500 dark:text-slate-400">
+          ) : fetched.current && (!thumbnails.length && !isLoading) ? (
+            <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400">
               Unable to preview
             </div>
           ) : (
-            <div className="aspect-[3/4] w-full animate-pulse bg-slate-200/70 dark:bg-slate-800/70" />
+            <div className="relative aspect-[3/4] w-full">
+              <Skeleton variant="rounded" className="h-full w-full" />
+            </div>
           )}
         </div>
         <div className="flex items-start justify-between gap-3">

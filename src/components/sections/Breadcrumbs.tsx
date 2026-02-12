@@ -26,8 +26,8 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <MuiBreadcrumbs
       aria-label="Breadcrumb"
-      className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80"
-      separator={<span className="mx-2 text-white/50">/</span>}
+      className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-800 dark:text-slate-200"
+      separator={<span className="mx-2 text-slate-600 dark:text-slate-400">/</span>}
     >
       {normalizedItems.slice(0, -1).map(({ text, href }, index) => {
         if (text === 'loading') {
@@ -44,7 +44,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
             <Link
               key={`${text}-${href}`}
               href={href}
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80 transition hover:text-white"
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400 transition hover:text-black dark:hover:text-white"
             >
               {text}
             </Link>
@@ -53,7 +53,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         return (
           <span
             key={`${text}-${index}`}
-            className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80"
+            className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-800 dark:text-slate-200"
           >
             {text}
           </span>
@@ -63,7 +63,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         (normalizedItems[normalizedItems.length - 1]?.text === 'loading' ? (
           <Skeleton variant="text" className="w-16" />
         ) : (
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em]">
             {normalizedItems[normalizedItems.length - 1]?.text}
           </span>
         ))}

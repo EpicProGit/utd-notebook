@@ -28,7 +28,7 @@ export default async function SectionCodePage({
       <SectionHeader
         eyebrow="Section"
         title={`${section.prefix} ${section.number}.${section.sectionCode}`}
-        details={[
+        detailBreadcrumbs={[
           `${section.term} ${section.year}`,
           `${section.profFirst} ${section.profLast}`,
         ]}

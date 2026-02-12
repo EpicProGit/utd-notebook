@@ -5,7 +5,7 @@ type SectionHeaderProps = {
   title: string;
   eyebrow?: string;
   description?: string;
-  details?: string[];
+  detailBreadcrumbs?: BreadcrumbItem[];
   metaLabel?: string;
   breadcrumbs?: BreadcrumbItem[];
 };
@@ -14,15 +14,15 @@ export default function SectionHeader({
   title,
   eyebrow,
   description,
-  details,
+  detailBreadcrumbs,
   metaLabel,
   breadcrumbs = [],
 }: SectionHeaderProps) {
-  const detailItems = (details ?? []).filter(Boolean);
+  const detailItems = (detailBreadcrumbs ?? []).filter(Boolean);
 
   return (
     <div className="flex flex-row justify-between items-center gap-4">
-      <div className="flex flex-col gap-2 text-white text-shadow-[0_0_8px_rgb(0_0_0_/_0.35)]">
+      <div className="flex flex-col gap-2 text-shadow-[0_0_8px_rgb(0_0_0_/_0.35)]">
         {breadcrumbs.length > 0 ? (
           <Breadcrumbs items={breadcrumbs} />
         ) : (
@@ -39,18 +39,7 @@ export default function SectionHeader({
             {description}
           </p>
         )}
-        {detailItems.length > 0 && (
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm md:text-base">
-            {detailItems.map((item, index) => (
-              <span key={`${item}-${index}`} className="flex items-center">
-                {item}
-                {index < detailItems.length - 1 && (
-                  <span className="ml-3 text-white/60">/</span>
-                )}
-              </span>
-            ))}
-          </div>
-        )}
+        {detailItems.length > 0 && <Breadcrumbs items={detailItems} />}
       </div>
 
       {metaLabel && (
