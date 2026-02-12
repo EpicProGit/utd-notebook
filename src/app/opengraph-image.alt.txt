@@ -1,0 +1,1 @@
+The UTD Notebook homepage displaying the search bar for courses or professors.
