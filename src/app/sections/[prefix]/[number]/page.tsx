@@ -1,7 +1,7 @@
 import EmptyStateCard from '@src/components/sections/EmptyStateCard';
 import LinkCard from '@src/components/sections/LinkCard';
 import SectionHeader from '@src/components/sections/SectionHeader';
-import { getSectionCodesByNumber } from '@src/utils/section';
+import { api } from '@src/trpc/server';
 
 type NumberPageProps = {
   params: Promise<{ prefix: string; number: string }>;
@@ -10,14 +10,17 @@ type NumberPageProps = {
 export default async function NumberPage({ params }: NumberPageProps) {
   const { prefix, number } = await params;
   const normalizedPrefix = prefix.toUpperCase();
-  const sections = await getSectionCodesByNumber(normalizedPrefix, number);
+  const sections = await api.section.getSectionCodesByNumber({
+    prefix: normalizedPrefix,
+    number,
+  });
 
   return (
     <>
       <SectionHeader
         eyebrow="Course"
         title={`${normalizedPrefix} ${number}`}
-        description="Choose a section code to view files, professor info, and term details."
+        description="Choose a section offering to view files, professor info, and term details."
         metaLabel={`${sections.length} section${
           sections.length === 1 ? '' : 's'
         }`}
@@ -31,14 +34,14 @@ export default async function NumberPage({ params }: NumberPageProps) {
       {sections.length === 0 ? (
         <EmptyStateCard
           title="No sections yet"
-          description="We could not find any section codes for this course number."
+          description="We could not find any section offerings for this course number."
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sections.map((item) => (
             <LinkCard
               key={item.id}
-              href={`/sections/${normalizedPrefix}/${number}/${item.sectionCode}`}
+              href={`/sections/${normalizedPrefix}/${number}/${item.sectionCode}/${item.id}`}
               title={`Section ${item.sectionCode}`}
               subtitle={`${item.profFirst} ${item.profLast}`}
               description={`${item.term} ${item.year}`}

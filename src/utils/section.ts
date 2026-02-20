@@ -1,25 +1,41 @@
 import 'server-only';
-import { api } from '@src/trpc/server';
-import {
-  type SectionCodeSummary,
-  type SectionNumberSummary,
-} from '@src/utils/sectionCore';
 
-export type { SectionCodeSummary, SectionNumberSummary };
-export * from '@src/utils/sectionCore';
+import { type SelectSection } from '@src/server/db/models';
 
-export async function getSectionNumbersByPrefix(prefix: string) {
-  return api.section.getSectionNumbersByPrefix({ prefix });
-}
+const termOrder: Record<SelectSection['term'], number> = {
+  Spring: 1,
+  Summer: 2,
+  Fall: 3,
+};
 
-export async function getSectionCodesByNumber(prefix: string, number: string) {
-  return api.section.getSectionCodesByNumber({ prefix, number });
-}
+export type SectionNumberSummary = {
+  number: SelectSection['number'];
+  sectionCount: number;
+  latestTerm: SelectSection['term'];
+  latestYear: SelectSection['year'];
+};
 
-export async function getSectionDetail(
-  prefix: string,
-  number: string,
-  sectionCode: string,
-) {
-  return api.section.getSectionDetail({ prefix, number, sectionCode });
-}
+export type SectionCodeSummary = {
+  id: SelectSection['id'];
+  sectionCode: SelectSection['sectionCode'];
+  term: SelectSection['term'];
+  year: SelectSection['year'];
+  profFirst: SelectSection['profFirst'];
+  profLast: SelectSection['profLast'];
+  fileCount: number;
+};
+
+export const normalizePrefix = (prefix: string) => prefix.toUpperCase();
+
+const compareLatest = (a: SelectSection, b: SelectSection) => {
+  if (a.year !== b.year) {
+    return b.year - a.year;
+  }
+  return (termOrder[b.term] ?? 0) - (termOrder[a.term] ?? 0);
+};
+
+export const pickLatestSection = <T extends SelectSection>(sections: T[]) =>
+  sections.reduce<T | null>((latest, current) => {
+    if (!latest) return current;
+    return compareLatest(current, latest) < 0 ? latest : current;
+  }, null);

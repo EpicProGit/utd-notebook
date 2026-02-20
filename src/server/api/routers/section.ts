@@ -1,37 +1,74 @@
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import {
-  sectionWithFiles,
-  type SectionWithFiles,
-  type SelectSection,
-} from '@src/server/db/models';
+import { type SectionWithFiles, type SelectSection } from '@src/server/db/models';
 import { section } from '@src/server/db/schema/section';
 import {
-  mockSections,
   normalizePrefix,
   pickLatestSection,
-  useMockData,
   type SectionCodeSummary,
   type SectionNumberSummary,
-} from '@src/utils/sectionCore';
+} from '@src/utils/section';
 import { createTRPCRouter, publicProcedure } from '../trpc';
 
 export type { SectionCodeSummary, SectionNumberSummary };
 
 const byPrefixSchema = z.object({
-  prefix: z.string().default(''),
+  prefix: z.string(),
 });
 
 const byNumberSchema = z.object({
-  prefix: z.string().default(''),
-  number: z.string().default(''),
+  prefix: z.string(),
+  number: z.string(),
 });
 
-const detailSchema = z.object({
-  prefix: z.string().default(''),
-  number: z.string().default(''),
-  sectionCode: z.string().default(''),
+const byCodeSchema = z.object({
+  prefix: z.string(),
+  number: z.string(),
+  sectionCode: z.string(),
 });
+
+const byIdSchema = z.object({
+  id: z.string(),
+});
+
+function groupBy<T, K extends string>(items: T[], keyFn: (item: T) => K) {
+  const map = new Map<K, T[]>();
+  for (const item of items) {
+    const key = keyFn(item);
+    const bucket = map.get(key) ?? [];
+    bucket.push(item);
+    map.set(key, bucket);
+  }
+  return map;
+}
+
+function toNumberSummaries(rows: SelectSection[]): SectionNumberSummary[] {
+  const byNumber = groupBy(rows, (r) => r.number);
+
+  return Array.from(byNumber.entries())
+    .map(([number, entries]) => {
+      const latest = pickLatestSection(entries);
+      return {
+        number,
+        sectionCount: entries.length,
+        latestTerm: latest?.term ?? 'Fall',
+        latestYear: latest?.year ?? new Date().getFullYear(),
+      };
+    })
+    .sort((a, b) => a.number.localeCompare(b.number));
+}
+
+function toCodeSummaries(rows: SectionWithFiles[]): SectionCodeSummary[] {
+  return rows.map((row) => ({
+    id: row.id,
+    sectionCode: row.sectionCode,
+    term: row.term,
+    year: row.year,
+    profFirst: row.profFirst,
+    profLast: row.profLast,
+    fileCount: row.files.length,
+  }));
+}
 
 export const sectionRouter = createTRPCRouter({
   getSectionNumbersByPrefix: publicProcedure
@@ -39,88 +76,17 @@ export const sectionRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const normalizedPrefix = normalizePrefix(input.prefix);
 
-      if (useMockData) {
-        const filtered = mockSections.filter(
-          (entry) => entry.prefix === normalizedPrefix,
-        );
-        const byNumber = new Map<string, SectionWithFiles[]>();
-        filtered.forEach((entry) => {
-          const bucket = byNumber.get(entry.number) ?? [];
-          bucket.push(entry);
-          byNumber.set(entry.number, bucket);
-        });
-
-        return Array.from(byNumber.entries())
-          .map(([number, entries]) => {
-            const latest = pickLatestSection(entries);
-            return {
-              number,
-              sectionCount: entries.length,
-              latestTerm: latest?.term ?? 'Fall',
-              latestYear: latest?.year ?? new Date().getFullYear(),
-            };
-          })
-          .sort((a, b) => a.number.localeCompare(b.number));
-      }
-
       const rows = await ctx.db.query.section.findMany({
         where: eq(section.prefix, normalizedPrefix),
       });
 
-      const byNumber = new Map<string, SelectSection[]>();
-      rows.forEach((entry) => {
-        const bucket = byNumber.get(entry.number) ?? [];
-        bucket.push(entry);
-        byNumber.set(entry.number, bucket);
-      });
-
-      return Array.from(byNumber.entries())
-        .map(([number, entries]) => {
-          const latest = pickLatestSection(entries);
-          return {
-            number,
-            sectionCount: entries.length,
-            latestTerm: latest?.term ?? 'Fall',
-            latestYear: latest?.year ?? new Date().getFullYear(),
-          };
-        })
-        .sort((a, b) => a.number.localeCompare(b.number));
+      return toNumberSummaries(rows);
     }),
+
   getSectionCodesByNumber: publicProcedure
     .input(byNumberSchema)
     .query(async ({ input, ctx }) => {
       const normalizedPrefix = normalizePrefix(input.prefix);
-
-      if (useMockData) {
-        const filtered = mockSections.filter(
-          (entry) =>
-            entry.prefix === normalizedPrefix && entry.number === input.number,
-        );
-        const byCode = new Map<string, SectionWithFiles[]>();
-        filtered.forEach((entry) => {
-          const bucket = byCode.get(entry.sectionCode) ?? [];
-          bucket.push(entry);
-          byCode.set(entry.sectionCode, bucket);
-        });
-
-        return Array.from(byCode.values())
-          .map((entries) => {
-            const latest = pickLatestSection(entries);
-            return latest
-              ? {
-                  id: latest.id,
-                  sectionCode: latest.sectionCode,
-                  term: latest.term,
-                  year: latest.year,
-                  profFirst: latest.profFirst,
-                  profLast: latest.profLast,
-                  fileCount: latest.files.length,
-                }
-              : null;
-          })
-          .filter((entry): entry is SectionCodeSummary => Boolean(entry))
-          .sort((a, b) => a.sectionCode.localeCompare(b.sectionCode));
-      }
 
       const rows = await ctx.db.query.section.findMany({
         where: and(
@@ -128,48 +94,20 @@ export const sectionRouter = createTRPCRouter({
           eq(section.number, input.number),
         ),
         with: { files: true },
-      });
-      const parsed = rows.map((row) => sectionWithFiles.parse(row));
-
-      const byCode = new Map<string, SectionWithFiles[]>();
-      parsed.forEach((entry) => {
-        const bucket = byCode.get(entry.sectionCode) ?? [];
-        bucket.push(entry);
-        byCode.set(entry.sectionCode, bucket);
+        orderBy: (sections, { asc, desc }) => [
+          asc(sections.sectionCode),
+          desc(sections.year),
+          desc(sections.term),
+        ],
       });
 
-      return Array.from(byCode.values())
-        .map((entries) => {
-          const latest = pickLatestSection(entries);
-          return latest
-            ? {
-                id: latest.id,
-                sectionCode: latest.sectionCode,
-                term: latest.term,
-                year: latest.year,
-                profFirst: latest.profFirst,
-                profLast: latest.profLast,
-                fileCount: latest.files.length,
-              }
-            : null;
-        })
-        .filter((entry): entry is SectionCodeSummary => Boolean(entry))
-        .sort((a, b) => a.sectionCode.localeCompare(b.sectionCode));
+      return toCodeSummaries(rows);
     }),
-  getSectionDetail: publicProcedure
-    .input(detailSchema)
+
+  getSectionsByCode: publicProcedure
+    .input(byCodeSchema)
     .query(async ({ input, ctx }) => {
       const normalizedPrefix = normalizePrefix(input.prefix);
-
-      if (useMockData) {
-        const matches = mockSections.filter(
-          (entry) =>
-            entry.prefix === normalizedPrefix &&
-            entry.number === input.number &&
-            entry.sectionCode === input.sectionCode,
-        );
-        return pickLatestSection(matches);
-      }
 
       const rows = await ctx.db.query.section.findMany({
         where: and(
@@ -178,8 +116,21 @@ export const sectionRouter = createTRPCRouter({
           eq(section.sectionCode, input.sectionCode),
         ),
         with: { files: true },
+        orderBy: (sections, { desc }) => [
+          desc(sections.year),
+          desc(sections.term),
+        ],
       });
-      const parsed = rows.map((row) => sectionWithFiles.parse(row));
-      return pickLatestSection(parsed);
+
+      return toCodeSummaries(rows);
     }),
+
+  getSectionById: publicProcedure
+    .input(byIdSchema)
+    .query(({ input, ctx }) =>
+      ctx.db.query.section.findFirst({
+        where: eq(section.id, input.id),
+        with: { files: true },
+      }),
+    ),
 });

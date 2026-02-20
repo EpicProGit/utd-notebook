@@ -1,7 +1,7 @@
 import EmptyStateCard from '@src/components/sections/EmptyStateCard';
-import FilesGrid from '@src/components/sections/FilesGrid';
+import LinkCard from '@src/components/sections/LinkCard';
 import SectionHeader from '@src/components/sections/SectionHeader';
-import { getSectionDetail } from '@src/utils/section';
+import { api } from '@src/trpc/server';
 
 type SectionCodePageProps = {
   params: Promise<{ prefix: string; number: string; sectionCode: string }>;
@@ -12,9 +12,13 @@ export default async function SectionCodePage({
 }: SectionCodePageProps) {
   const { prefix, number, sectionCode } = await params;
   const normalizedPrefix = prefix.toUpperCase();
-  const section = await getSectionDetail(normalizedPrefix, number, sectionCode);
+  const sections = await api.section.getSectionsByCode({
+    prefix: normalizedPrefix,
+    number,
+    sectionCode,
+  });
 
-  if (!section) {
+  if (sections.length === 0) {
     return (
       <EmptyStateCard
         title="Section not found"
@@ -27,13 +31,10 @@ export default async function SectionCodePage({
     <>
       <SectionHeader
         eyebrow="Section"
-        title={`${section.prefix} ${section.number}.${section.sectionCode}`}
-        detailBreadcrumbs={[
-          `${section.term} ${section.year}`,
-          `${section.profFirst} ${section.profLast}`,
-        ]}
-        metaLabel={`${section.files.length} file${
-          section.files.length === 1 ? '' : 's'
+        title={`${normalizedPrefix} ${number}.${sectionCode}`}
+        description="Choose a term and year to view files for this section code."
+        metaLabel={`${sections.length} section${
+          sections.length === 1 ? '' : 's'
         }`}
         breadcrumbs={[
           { label: 'Sections' },
@@ -45,7 +46,17 @@ export default async function SectionCodePage({
           { label: sectionCode },
         ]}
       />
-      <FilesGrid files={section.files} />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sections.map((item) => (
+          <LinkCard
+            key={item.id}
+            href={`/sections/${normalizedPrefix}/${number}/${sectionCode}/${item.id}`}
+            title={`${item.term} ${item.year}`}
+            subtitle={`${item.profFirst} ${item.profLast}`}
+            meta={`${item.fileCount} file${item.fileCount === 1 ? '' : 's'}`}
+          />
+        ))}
+      </div>
     </>
   );
 }

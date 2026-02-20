@@ -1,7 +1,7 @@
 import EmptyStateCard from '@src/components/sections/EmptyStateCard';
 import LinkCard from '@src/components/sections/LinkCard';
 import SectionHeader from '@src/components/sections/SectionHeader';
-import { getSectionNumbersByPrefix } from '@src/utils/section';
+import { api } from '@src/trpc/server';
 
 type PrefixPageProps = {
   params: Promise<{ prefix: string }>;
@@ -10,7 +10,9 @@ type PrefixPageProps = {
 export default async function PrefixPage({ params }: PrefixPageProps) {
   const { prefix } = await params;
   const normalizedPrefix = prefix.toUpperCase();
-  const numbers = await getSectionNumbersByPrefix(normalizedPrefix);
+  const numbers = await api.section.getSectionNumbersByPrefix({
+    prefix: normalizedPrefix,
+  });
 
   return (
     <>
