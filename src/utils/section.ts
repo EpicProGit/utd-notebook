@@ -1,5 +1,4 @@
 import 'server-only';
-
 import { type SelectSection } from '@src/server/db/models';
 
 const termOrder: Record<SelectSection['term'], number> = {

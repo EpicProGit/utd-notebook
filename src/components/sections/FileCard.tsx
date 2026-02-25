@@ -68,7 +68,7 @@ export default function FileCard({ file }: FileCardProps) {
                 unoptimized
               />
             </div>
-          ) : fetched.current && (!thumbnails.length && !isLoading) ? (
+          ) : fetched.current && !thumbnails.length && !isLoading ? (
             <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400">
               Unable to preview
             </div>

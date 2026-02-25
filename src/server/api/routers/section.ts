@@ -1,6 +1,9 @@
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { type SectionWithFiles, type SelectSection } from '@src/server/db/models';
+import {
+  type SectionWithFiles,
+  type SelectSection,
+} from '@src/server/db/models';
 import { section } from '@src/server/db/schema/section';
 import {
   normalizePrefix,
@@ -125,12 +128,10 @@ export const sectionRouter = createTRPCRouter({
       return toCodeSummaries(rows);
     }),
 
-  getSectionById: publicProcedure
-    .input(byIdSchema)
-    .query(({ input, ctx }) =>
-      ctx.db.query.section.findFirst({
-        where: eq(section.id, input.id),
-        with: { files: true },
-      }),
-    ),
+  getSectionById: publicProcedure.input(byIdSchema).query(({ input, ctx }) =>
+    ctx.db.query.section.findFirst({
+      where: eq(section.id, input.id),
+      with: { files: true },
+    }),
+  ),
 });

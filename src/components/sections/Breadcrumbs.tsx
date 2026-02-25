@@ -27,7 +27,9 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     <MuiBreadcrumbs
       aria-label="Breadcrumb"
       className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-800 dark:text-slate-200"
-      separator={<span className="mx-2 text-slate-600 dark:text-slate-400">/</span>}
+      separator={
+        <span className="mx-2 text-slate-600 dark:text-slate-400">/</span>
+      }
     >
       {normalizedItems.slice(0, -1).map(({ text, href }, index) => {
         if (text === 'loading') {
