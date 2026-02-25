@@ -22,7 +22,7 @@ export default function SectionHeader({
 
   return (
     <div className="flex flex-row justify-between items-center gap-4">
-      <div className="flex flex-col gap-2 text-shadow-[0_0_8px_rgb(0_0_0_/_0.35)]">
+      <div className="flex flex-col gap-2">
         {breadcrumbs.length > 0 ? (
           <Breadcrumbs items={breadcrumbs} />
         ) : (
