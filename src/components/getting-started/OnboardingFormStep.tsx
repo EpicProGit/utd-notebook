@@ -25,7 +25,18 @@ const OnboardingFormStep = withForm({
         case 1:
           FormStepData = (
             <FormStepContent title="Name">
-              <form.Question question="Please check that your name is correct. This is how you will appear to fellow students on UTD Notebook.">
+              <form.Question question="Choose a unique username. This is how you will be publicly identified on UTD Notebook.">
+                <form.AppField name="username">
+                  {(field) => (
+                    <field.TextField
+                      label="Username"
+                      className="grow"
+                      placeholder="e.g. john-doe"
+                    />
+                  )}
+                </form.AppField>
+              </form.Question>
+              <form.Question question="Please check that your name is correct.">
                 <form.AppField name="firstName">
                   {(field) => (
                     <field.TextField

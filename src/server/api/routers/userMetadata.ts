@@ -1,6 +1,7 @@
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, ne, sql } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { type personalCats } from '@src/constants/categories';
 import { auth } from '@src/server/auth';
 import { insertUserMetadata } from '@src/server/db/models';
@@ -32,6 +33,22 @@ export const userMetadataRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const { updateUser } = input;
       const { user } = ctx.session;
+
+      // Check username uniqueness if username is being changed
+      if (updateUser.username) {
+        const existingUser = await ctx.db.query.userMetadata.findFirst({
+          where: and(
+            eq(userMetadata.username, updateUser.username),
+            ne(userMetadata.id, user.id),
+          ),
+        });
+        if (existingUser) {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Username is already taken',
+          });
+        }
+      }
 
       const updatedUser = (
         await ctx.db

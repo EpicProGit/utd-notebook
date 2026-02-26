@@ -23,7 +23,12 @@ export const fileRouter = createTRPCRouter({
     try {
       const byId = await ctx.db.query.file.findFirst({
         where: (file) => eq(file.id, id),
-        with: { section: true },
+        with: {
+          section: true,
+          author: {
+            columns: { username: true, firstName: true, lastName: true },
+          },
+        },
       });
 
       return byId;
@@ -163,6 +168,9 @@ export const fileRouter = createTRPCRouter({
           : undefined,
         with: {
           section: true,
+          author: {
+            columns: { username: true, firstName: true, lastName: true },
+          },
         },
       });
 

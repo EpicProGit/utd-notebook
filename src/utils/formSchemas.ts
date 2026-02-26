@@ -1,7 +1,17 @@
 import { z } from 'zod';
 import { studentClassificationEnum } from '@src/server/db/schema/user';
 
+const usernameSchema = z
+  .string()
+  .min(3, 'Username must be at least 3 characters')
+  .max(30, 'Username must be at most 30 characters')
+  .regex(
+    /^[a-zA-Z0-9_-]+$/,
+    'Username can only contain letters, numbers, hyphens, and underscores',
+  );
+
 export const accountSettingsSchema = z.object({
+  username: usernameSchema,
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   major: z.string().min(1, 'College major is required'),
@@ -20,6 +30,7 @@ export const accountSettingsSchema = z.object({
 export type AccountSettingsSchema = z.infer<typeof accountSettingsSchema>;
 
 export const accountOnboardingSchema = z.object({
+  username: usernameSchema.optional(),
   firstName: z.string().min(1, 'Name is required'),
   lastName: z.string().optional(),
   major: z.string().optional(),
