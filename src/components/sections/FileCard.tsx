@@ -4,7 +4,7 @@ import { useThumbnails, type FileData } from '@mkholt/pdf-thumbnail';
 import { Skeleton } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
 
@@ -29,10 +29,6 @@ export default function FileCard({ file }: FileCardProps) {
     [file.name, thumbnailUrl],
   );
 
-  const { thumbnails, isLoading } = useThumbnails(files);
-  const thumbData = thumbnails[0]?.thumbData;
-  const fetched = useRef(false);
-
   /*
     !isLoading does not mean thumbData is not null.
     Even with no errors and isLoading, takes a few rerenders to populate thumbData.
@@ -42,11 +38,8 @@ export default function FileCard({ file }: FileCardProps) {
     useThumbnails.error has always been null in testing,
     so we won't rely on that for error handling.
   */
-  useEffect(() => {
-    if (!fetched.current) {
-      fetched.current = true;
-    }
-  }, [isLoading]);
+  const { thumbnails, isLoading, error } = useThumbnails(files);
+  const thumbData = thumbnails[0]?.thumbData;
 
   return (
     <BaseCard variant="interactive" className="h-full">
@@ -68,7 +61,7 @@ export default function FileCard({ file }: FileCardProps) {
                 unoptimized
               />
             </div>
-          ) : fetched.current && !thumbnails.length && !isLoading ? (
+          ) : (!isLoading && !thumbData && thumbnails.length > 0) || error ? (
             <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400">
               Unable to preview
             </div>
