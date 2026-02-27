@@ -28,16 +28,7 @@ export default function FileCard({ file }: FileCardProps) {
     () => [{ file: thumbnailUrl, name: file.name }],
     [file.name, thumbnailUrl],
   );
-
-  /*
-    !isLoading does not mean thumbData is not null.
-    Even with no errors and isLoading, takes a few rerenders to populate thumbData.
-    On mount, isLoading is false and thumbData is null. 
-    So we want to wait for the first fetch to trigger (indicated by isLoading turning true)
-    before showing "Unable to preview".
-    useThumbnails.error has always been null in testing,
-    so we won't rely on that for error handling.
-  */
+  
   const { thumbnails, isLoading, error } = useThumbnails(files);
   const thumbData = thumbnails[0]?.thumbData;
 
