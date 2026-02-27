@@ -28,7 +28,7 @@ export default function FileCard({ file }: FileCardProps) {
     () => [{ file: thumbnailUrl, name: file.name }],
     [file.name, thumbnailUrl],
   );
-  
+
   const { thumbnails, isLoading, error } = useThumbnails(files);
   const thumbData = thumbnails[0]?.thumbData;
 
