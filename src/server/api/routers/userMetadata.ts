@@ -91,6 +91,14 @@ export const userMetadataRouter = createTRPCRouter({
       });
       return await users;
     }),
+  usernameExists: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const existing = await ctx.db.query.userMetadata.findFirst({
+        where: eq(userMetadata.username, input.username),
+      });
+      return !!existing;
+    }),
   getUserSidebarCapabilities: publicProcedure.query(async ({ ctx }) => {
     const session = ctx.session;
     const capabilites: (typeof personalCats)[number][] = [];

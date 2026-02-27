@@ -37,7 +37,6 @@ export default function UserInfo({ user }: UserInfoProps) {
   );
 
   const [defaultValues, setDefaultValues] = useState<AccountSettingsSchema>({
-    username: user?.username ?? '',
     firstName: user?.firstName ?? '',
     lastName: user?.lastName ?? '',
     major: user?.major ?? '',
@@ -64,7 +63,6 @@ export default function UserInfo({ user }: UserInfoProps) {
         if (updated) {
           const updatedFixed = {
             ...updated,
-            username: updated?.username ?? '',
             graduationDate: updated?.graduationDate
               ? new Date(
                   updated?.graduationDate?.getTime() +
@@ -94,13 +92,6 @@ export default function UserInfo({ user }: UserInfoProps) {
       <Panel heading="Personal Information">
         <div className="m-2 flex flex-col gap-6 max-w-2xl">
           <form.FieldSet name="name" title="Name" icon={<PersonIconOutlined />}>
-            <div className="flex flex-wrap gap-6">
-              <form.AppField name="username">
-                {(field) => (
-                  <field.TextField label="Username" className="grow" />
-                )}
-              </form.AppField>
-            </div>
             <div className="flex flex-wrap gap-6">
               <form.AppField name="firstName">
                 {(field) => (

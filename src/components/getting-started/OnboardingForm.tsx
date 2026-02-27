@@ -25,7 +25,7 @@ import OnboardingFormStep from './OnboardingFormStep';
 
 // "Source of truth" array that contains the actual steps of the form
 const stepsBody = [
-  { id: 1, label: 'Name', fields: ['username', 'firstName', 'lastName'] },
+  { id: 1, label: 'Name', fields: ['firstName', 'lastName'] },
   {
     id: 2,
     label: 'College Info',
@@ -72,7 +72,6 @@ export default function OnboardingForm({
   const [defaultValues, setDefaultValues] = useState<
     Partial<AccountOnboardingSchema>
   >({
-    username: userMetadata?.username ?? '',
     firstName: userMetadata?.firstName,
     lastName: userMetadata?.lastName,
     major: userMetadata?.major,
@@ -99,7 +98,6 @@ export default function OnboardingForm({
         if (updated) {
           const updatedFixed = {
             ...updated,
-            username: updated?.username ?? '',
             graduationDate: updated?.graduationDate
               ? new Date(
                   updated?.graduationDate?.getTime() +
