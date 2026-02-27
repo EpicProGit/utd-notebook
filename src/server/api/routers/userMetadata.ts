@@ -1,7 +1,7 @@
+import { TRPCError } from '@trpc/server';
 import { and, eq, ne, sql } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { z } from 'zod';
-import { TRPCError } from '@trpc/server';
 import { type personalCats } from '@src/constants/categories';
 import { auth } from '@src/server/auth';
 import { insertUserMetadata } from '@src/server/db/models';
