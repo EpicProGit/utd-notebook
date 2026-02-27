@@ -57,4 +57,10 @@ export const auth = betterAuth({
       enabled: true,
     },
   },
+  trustedOrigins: [
+    'http://localhost:3000',
+    'https://notebook.utdnebula.com',
+    'https://notebook-*-utdnebula.vercel.app',
+    'http://192.168.137.1:3000',
+  ],
 });
