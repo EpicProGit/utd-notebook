@@ -5,10 +5,10 @@ import SectionHeader from '@src/components/sections/SectionHeader';
 import type { SectionWithFiles } from '@src/server/db/models';
 import { api } from '@src/trpc/server';
 import {
-  type NoteQuery,
   noteQueryToDescription,
   noteQueryToTitle,
   parseNoteSlug,
+  type NoteQuery,
 } from '@src/utils/noteSlug';
 
 type NotesPageProps = {
@@ -93,7 +93,9 @@ function getCourseLinks(sections: SectionWithFiles[], query: NoteQuery) {
   }
 
   return Array.from(courseMap.values())
-    .sort((a, b) => `${a.prefix} ${a.number}`.localeCompare(`${b.prefix} ${b.number}`))
+    .sort((a, b) =>
+      `${a.prefix} ${a.number}`.localeCompare(`${b.prefix} ${b.number}`),
+    )
     .map((course) => ({
       href: `/notes/${course.prefix}/${course.number}/${query.profFirst}/${query.profLast}`,
       title: `${course.prefix} ${course.number}`,

@@ -28,7 +28,13 @@ export function parseNoteSlug(slug: string[]): NoteQuery | null {
     if (profTokens.length >= 2) {
       const profLast = profTokens[profTokens.length - 1]!;
       const profFirst = profTokens.slice(0, -1).join(' ');
-      return { type: 'courseAndProfessor', prefix, number, profFirst, profLast };
+      return {
+        type: 'courseAndProfessor',
+        prefix,
+        number,
+        profFirst,
+        profLast,
+      };
     }
 
     return { type: 'course', prefix, number };
