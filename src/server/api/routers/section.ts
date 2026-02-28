@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, ilike } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   type SectionWithFiles,
@@ -32,6 +32,23 @@ const byCodeSchema = z.object({
 
 const byIdSchema = z.object({
   id: z.string(),
+});
+
+const byCourseSchema = z.object({
+  prefix: z.string(),
+  number: z.string(),
+});
+
+const byProfessorSchema = z.object({
+  profFirst: z.string(),
+  profLast: z.string(),
+});
+
+const byCourseAndProfessorSchema = z.object({
+  prefix: z.string(),
+  number: z.string(),
+  profFirst: z.string(),
+  profLast: z.string(),
 });
 
 function groupBy<T, K extends string>(items: T[], keyFn: (item: T) => K) {
@@ -134,4 +151,58 @@ export const sectionRouter = createTRPCRouter({
       with: { files: true },
     }),
   ),
+
+  getNotesByCourse: publicProcedure
+    .input(byCourseSchema)
+    .query(async ({ input, ctx }) => {
+      const normalizedPrefix = normalizePrefix(input.prefix);
+
+      return ctx.db.query.section.findMany({
+        where: and(
+          eq(section.prefix, normalizedPrefix),
+          eq(section.number, input.number),
+        ),
+        with: { files: true },
+        orderBy: (sections, { desc }) => [
+          desc(sections.year),
+          desc(sections.term),
+        ],
+      });
+    }),
+
+  getNotesByProfessor: publicProcedure
+    .input(byProfessorSchema)
+    .query(async ({ input, ctx }) => {
+      return ctx.db.query.section.findMany({
+        where: and(
+          ilike(section.profFirst, input.profFirst),
+          ilike(section.profLast, input.profLast),
+        ),
+        with: { files: true },
+        orderBy: (sections, { desc }) => [
+          desc(sections.year),
+          desc(sections.term),
+        ],
+      });
+    }),
+
+  getNotesByCourseAndProfessor: publicProcedure
+    .input(byCourseAndProfessorSchema)
+    .query(async ({ input, ctx }) => {
+      const normalizedPrefix = normalizePrefix(input.prefix);
+
+      return ctx.db.query.section.findMany({
+        where: and(
+          eq(section.prefix, normalizedPrefix),
+          eq(section.number, input.number),
+          ilike(section.profFirst, input.profFirst),
+          ilike(section.profLast, input.profLast),
+        ),
+        with: { files: true },
+        orderBy: (sections, { desc }) => [
+          desc(sections.year),
+          desc(sections.term),
+        ],
+      });
+    }),
 });
