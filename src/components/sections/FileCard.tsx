@@ -4,7 +4,7 @@ import { useThumbnails, type FileData } from '@mkholt/pdf-thumbnail';
 import { Skeleton } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
 
@@ -15,6 +15,7 @@ type FileCardProps = {
 const formatUpdatedAt = (updatedAt: SelectFile['updatedAt']) => {
   const date =
     updatedAt instanceof Date ? updatedAt : new Date(updatedAt ?? Date.now());
+
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
@@ -24,13 +25,42 @@ const formatUpdatedAt = (updatedAt: SelectFile['updatedAt']) => {
 
 export default function FileCard({ file }: FileCardProps) {
   const thumbnailUrl = file.publicUrl;
+
   const files = useMemo<FileData[]>(
     () => [{ file: thumbnailUrl, name: file.name }],
     [file.name, thumbnailUrl],
   );
 
-  const { thumbnails, isLoading, error } = useThumbnails(files);
+  const { thumbnails, isLoading } = useThumbnails(files);
   const thumbData = thumbnails[0]?.thumbData;
+
+  /*
+    !isLoading does not mean thumbData is not null.
+    Even with no errors and isLoading false, it can take a few rerenders
+    for thumbData to be populated.
+
+    On mount, isLoading is false and thumbData is null.
+    So we do not want to show "Unable to preview" immediately.
+
+    We wait until the first real fetch begins, indicated by isLoading
+    turning true at least once. After that, if loading has finished and we
+    still have no thumbnail data, we can treat it as a preview failure.
+
+    We store that "has started fetching at least once" flag in state,
+    because it affects rendering.
+
+    useThumbnails.error has always been null in testing,
+    so we are not relying on it for error handling here.
+  */
+
+  const [hasStartedFetching, setHasStartedFetching] = useState(false);
+
+  if (isLoading && !hasStartedFetching) {
+    setHasStartedFetching(true);
+  }
+
+  const showPreviewError =
+    hasStartedFetching && !thumbData && thumbnails.length === 0 && !isLoading;
 
   return (
     <BaseCard variant="interactive" className="h-full">
@@ -40,7 +70,7 @@ export default function FileCard({ file }: FileCardProps) {
         rel="noreferrer"
         className="flex h-full flex-col gap-3 p-4"
       >
-        <div className="overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800 bg-slate-50 shadow-sm">
+        <div className="overflow-hidden rounded-md border border-neutral-200 bg-slate-50 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
           {thumbData ? (
             <div className="relative aspect-[3/4] w-full">
               <Image
@@ -52,7 +82,7 @@ export default function FileCard({ file }: FileCardProps) {
                 unoptimized
               />
             </div>
-          ) : (!isLoading && !thumbData && thumbnails.length > 0) || error ? (
+          ) : showPreviewError ? (
             <div className="flex aspect-[3/4] w-full items-center justify-center text-xs font-medium text-slate-600 dark:text-slate-400">
               Unable to preview
             </div>
@@ -62,10 +92,11 @@ export default function FileCard({ file }: FileCardProps) {
             </div>
           )}
         </div>
+
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h3
-              className="line-clamp-1 text-lg font-semibold" // line-clamp-2 looks slightly too full, might want to restructure the card.
+              className="line-clamp-1 text-lg font-semibold"
               title={file.name}
             >
               {file.name}
