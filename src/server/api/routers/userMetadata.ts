@@ -103,12 +103,12 @@ export const userMetadataRouter = createTRPCRouter({
     const session = ctx.session;
     const capabilites: (typeof personalCats)[number][] = [];
     if (!session) return capabilites;
-    if (
-      await ctx.db.query.admin.findFirst({
+    const [isAdmin] = await Promise.all([
+      ctx.db.query.admin.findFirst({
         where: eq(admin.userId, session.user.id),
-      })
-    )
-      capabilites.push('Admin');
+      }),
+    ]);
+    if (isAdmin) capabilites.push('Admin');
     return capabilites;
   }),
 });

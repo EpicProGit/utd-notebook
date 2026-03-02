@@ -152,9 +152,10 @@ export const fileRouter = createTRPCRouter({
         throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
 
-      await callStorageAPI('DELETE', file.id);
-
-      await ctx.db.delete(files).where(eq(files.id, input.id));
+      await Promise.all([
+        callStorageAPI('DELETE', file.id),
+        ctx.db.delete(files).where(eq(files.id, input.id)),
+      ]);
 
       return { success: true };
     }),
