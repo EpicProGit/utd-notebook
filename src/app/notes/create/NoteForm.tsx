@@ -6,8 +6,23 @@ import Panel, { PanelSkeleton } from '@src/components/common/Panel';
 import FormFile from '@src/components/form/FormFile';
 import { useTRPC } from '@src/trpc/react';
 import { useAppForm } from '@src/utils/form';
-import { createFileFormSchema } from '@src/utils/formSchemas';
+import {
+  createFileFormSchema,
+  editFileFormSchema,
+} from '@src/utils/formSchemas';
 import { useUploadToUploadURL } from '@src/utils/uploadFile';
+
+type NoteFormProps =
+  | { mode?: 'create' }
+  | {
+      mode: 'edit';
+      file: {
+        id: string;
+        name: string;
+        description?: string;
+        publicUrl: string;
+      };
+    };
 
 interface FileDetails {
   file: File | null;
@@ -16,7 +31,19 @@ interface FileDetails {
   section: string;
 }
 
-const FileForm = () => {
+interface EditFileDetails {
+  file: File | null;
+  name: string;
+  description?: string;
+}
+
+const NoteForm = (props: NoteFormProps) => {
+  const isEdit = props.mode === 'edit';
+
+  return isEdit ? <EditForm file={props.file} /> : <CreateForm />;
+};
+
+const CreateForm = () => {
   const api = useTRPC();
   const createMutation = useMutation(api.file.create.mutationOptions());
   const updateMutation = useMutation(api.file.update.mutationOptions());
@@ -159,9 +186,129 @@ const FileForm = () => {
   );
 };
 
-export default FileForm;
+const EditForm = ({
+  file: existingFile,
+}: {
+  file: { id: string; name: string; description?: string; publicUrl: string };
+}) => {
+  const api = useTRPC();
+  const updateMutation = useMutation(api.file.update.mutationOptions());
+  const uploadFile = useUploadToUploadURL();
+  const router = useRouter();
 
-export const FileFormSkeleton = () => {
+  const defaultValues: EditFileDetails = {
+    file: null,
+    name: existingFile.name,
+    description: existingFile.description ?? '',
+  };
+
+  const form = useAppForm({
+    defaultValues,
+    onSubmit: async ({ value, formApi }) => {
+      const { file: newFile, ...rest } = value;
+      const isFileDirty = !formApi.getFieldMeta('file')?.isDefaultValue;
+
+      let fileUrl = existingFile.publicUrl;
+      if (isFileDirty && newFile) {
+        fileUrl = await uploadFile.mutateAsync({
+          file: newFile,
+          fileName: existingFile.id,
+        });
+      }
+
+      updateMutation.mutate(
+        {
+          id: existingFile.id,
+          ...rest,
+          file: fileUrl,
+        },
+        {
+          onSuccess: () => {
+            router.push(`/notes/${existingFile.id}`);
+          },
+        },
+      );
+    },
+    validators: {
+      onChange: editFileFormSchema,
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+      className="w-full max-w-6xl"
+    >
+      <Panel heading="Edit Note" description="Update your note details.">
+        <div className="flex flex-col gap-4">
+          <form.AppField name="file">
+            {(field) => (
+              <FormFile
+                label="File"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => {
+                  const file = e.target.files?.[0] ?? null;
+                  field.handleChange(file);
+                }}
+                helperText={
+                  !field.state.meta.isValid
+                    ? field.state.meta.errors
+                        .map((err) => err?.message)
+                        .join('. ') + '.'
+                    : undefined
+                }
+              />
+            )}
+          </form.AppField>
+          <form.AppField name="name">
+            {(field) => <field.TextField label="Name" className="w-full" />}
+          </form.AppField>
+          <form.AppField name="description">
+            {(field) => (
+              <field.TextField
+                label="Description"
+                multiline
+                minRows={4}
+                helperText={
+                  <span>
+                    We support{' '}
+                    <a
+                      href="https://www.markdownguide.org/basic-syntax/"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="text-royal dark:text-cornflower-300 underline"
+                    >
+                      Markdown
+                    </a>
+                    !
+                  </span>
+                }
+                className="w-full"
+              />
+            )}
+          </form.AppField>
+        </div>
+        <div className="flex flex-wrap justify-end items-center gap-2">
+          <form.AppForm>
+            <form.ResetButton />
+          </form.AppForm>
+          <form.AppForm>
+            <form.SubmitButton />
+          </form.AppForm>
+        </div>
+      </Panel>
+    </form>
+  );
+};
+
+export default NoteForm;
+
+export const NoteFormSkeleton = () => {
   return (
     <div className="flex flex-col gap-4 max-w-full">
       <PanelSkeleton />

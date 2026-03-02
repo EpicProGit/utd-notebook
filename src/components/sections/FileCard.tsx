@@ -1,12 +1,14 @@
 'use client';
 
 import { useThumbnails, type FileData } from '@mkholt/pdf-thumbnail';
+import EditIcon from '@mui/icons-material/Edit';
 import { Skeleton } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
+import { authClient } from '@src/utils/auth-client';
 
 type FileCardProps = {
   file: SelectFile;
@@ -24,6 +26,9 @@ const formatUpdatedAt = (updatedAt: SelectFile['updatedAt']) => {
 };
 
 export default function FileCard({ file }: FileCardProps) {
+  const { data: session } = authClient.useSession();
+  const isAuthor = session?.user?.id === file.authorId;
+
   const thumbnailUrl = file.publicUrl;
 
   const files = useMemo<FileData[]>(
@@ -117,6 +122,18 @@ export default function FileCard({ file }: FileCardProps) {
           Updated {formatUpdatedAt(file.updatedAt)}
         </div>
       </Link>
+
+      {isAuthor && (
+        <div className="flex justify-end border-t border-neutral-200 px-4 py-2 dark:border-neutral-700">
+          <Link
+            href={`/notes/${file.id}/edit`}
+            className="flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+          >
+            <EditIcon fontSize="small" />
+            Edit
+          </Link>
+        </div>
+      )}
     </BaseCard>
   );
 }
