@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import Header from '@src/components/header/Header';
 
-type SectionsLayoutProps = {
+type NotesLayoutProps = {
   children: ReactNode;
 };
 
-export default function SectionsLayout({ children }: SectionsLayoutProps) {
+export default function NotesLayout({ children }: NotesLayoutProps) {
   return (
     <main className="relative min-h-screen">
       <Header />
