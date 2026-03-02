@@ -148,7 +148,17 @@ const FileForm = () => {
 
               <form.AppField name="section">
                 {(field) => (
-                  <field.TextField label="Section" className="w-full" />
+                  <field.TextField
+                    label="Section"
+                    className="w-full"
+                    helperText={
+                      !field.state.meta.isValid
+                        ? field.state.meta.errors
+                            .map((err) => err?.message)
+                            .join('. ') + '.'
+                        : 'Example: CS 1200.001 Fall 2025'
+                    }
+                  />
                 )}
               </form.AppField>
             </div>
