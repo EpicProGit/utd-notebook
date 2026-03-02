@@ -1,4 +1,5 @@
-import { eq, sql } from 'drizzle-orm';
+import { TRPCError } from '@trpc/server';
+import { and, eq, ne, sql } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { z } from 'zod';
 import { type personalCats } from '@src/constants/categories';
@@ -32,6 +33,22 @@ export const userMetadataRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const { updateUser } = input;
       const { user } = ctx.session;
+
+      // Check username uniqueness if username is being changed
+      if (updateUser.username) {
+        const existingUser = await ctx.db.query.userMetadata.findFirst({
+          where: and(
+            eq(userMetadata.username, updateUser.username),
+            ne(userMetadata.id, user.id),
+          ),
+        });
+        if (existingUser) {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Username is already taken',
+          });
+        }
+      }
 
       const updatedUser = (
         await ctx.db
@@ -73,6 +90,14 @@ export const userMetadataRouter = createTRPCRouter({
         }) ilike ${'%' + input.name + '%'}`,
       });
       return await users;
+    }),
+  usernameExists: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const existing = await ctx.db.query.userMetadata.findFirst({
+        where: eq(userMetadata.username, input.username),
+      });
+      return !!existing;
     }),
   getUserSidebarCapabilities: publicProcedure.query(async ({ ctx }) => {
     const session = ctx.session;

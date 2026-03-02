@@ -33,11 +33,29 @@ export const auth = betterAuth({
           const firstName = user.name?.split(' ')[0] ?? '';
           const lastName = user.name?.split(' ')[1] ?? '';
 
+          // Generate a base username from the user's name
+          const baseUsername = (user.name ?? 'user')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 24);
+
+          // Check for collisions and append random digits if needed
+          let username = baseUsername;
+          while (
+            await db.query.userMetadata.findFirst({
+              where: eq(userMetadata.username, username),
+            })
+          ) {
+            username = `${baseUsername}-${Math.floor(1000 + Math.random() * 9000)}`;
+          }
+
           const insert: InsertUserMetadata = {
             firstName,
             lastName,
             id: user.id,
             major: '',
+            username,
           };
           await db.insert(userMetadata).values(insert).returning();
         },
