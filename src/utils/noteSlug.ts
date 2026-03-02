@@ -1,5 +1,5 @@
 const COURSE_PREFIX_REGEX = /^[A-Z]{2,4}$/i;
-const COURSE_NUMBER_REGEX = /^[0-9A-Z]{4}$/i;
+const COURSE_NUMBER_REGEX = /^(?=.*\d)[0-9A-Z]{4}$/i;
 
 export type NoteQuery =
   | { type: 'course'; prefix: string; number: string }

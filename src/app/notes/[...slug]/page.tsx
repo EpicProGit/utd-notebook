@@ -134,7 +134,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
           description="No notes have been uploaded for this query yet."
         />
       ) : (
-        <div className="flex flex-col gap-8">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {/* Links to course+prof combo pages */}
           {(query.type === 'course' || query.type === 'professor') && (
             <>
@@ -145,7 +145,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
                     : getCourseLinks(sections, query);
                 if (links.length <= 1) return null;
                 return (
-                  <div>
+                  <div className="col-span-full">
                     <h2 className="mb-3 text-lg font-semibold">
                       {query.type === 'course'
                         ? 'Filter by professor'
@@ -169,7 +169,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
           {/* Notes grouped by section */}
           {sections.map((s) => (
-            <div key={s.id}>
+            <div key={s.id} className="col-span-full">
               <h2 className="mb-3 text-lg font-semibold">
                 {s.prefix} {s.number}.{s.sectionCode} — {s.term} {s.year}
                 <span className="ml-2 text-sm font-normal text-slate-600 dark:text-slate-400">
