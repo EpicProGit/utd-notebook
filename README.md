@@ -36,8 +36,8 @@ This project uses [NextAuth](https://next-auth.js.org/) for authentication. Next
 
 Once you have your Client ID and Client Secrets, add them to your `.env` file.
 
-The `NEXTAUTH_URL` variable should be set to `http://localhost:3000` for local development.
-The `NEXTAUTH_SECRET` variable should be set to a random string of characters. You can generate one [here](https://randomkeygen.com/).
+The `BETTER_AUTH_URL` variable should be set to `http://localhost:3000` for local development.
+The `BETTER_AUTH_SECRET` variable should be set to a random string of characters. You can generate one [here](https://randomkeygen.com/).
 or by running the following command in your terminal.
 
 ```bash

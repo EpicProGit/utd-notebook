@@ -8,12 +8,13 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
+import { eq } from 'drizzle-orm';
+import { headers } from 'next/headers';
+import { cache } from 'react';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
-
-import { getServerAuthSession } from '@src/server/auth';
+import { auth } from '@src/server/auth';
 import { db } from '@src/server/db';
-import { cache } from 'react';
 
 /**
  * 1. CONTEXT
@@ -31,7 +32,9 @@ import { cache } from 'react';
  */
 export const createTRPCContext = cache(async () => {
   // Fetch stuff that depends on the request
-  const session = await getServerAuthSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return {
     session,
     db,
@@ -112,3 +115,17 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Admin procedures
+ * Make sure the user invoking the procedure is an admin
+ */
+
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const isAdmin = await ctx.db.query.admin.findFirst({
+    where: (admin) => eq(admin.userId, ctx.session.user.id),
+  });
+  if (!isAdmin) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+  return next();
+});

@@ -25,6 +25,7 @@
   --color-cornflower-700: #45449f; /* ~royal*/
   --color-cornflower-800: #363475;
   --color-cornflower-900: #28254d;
+  --color-cornflower-950: #141327;
   --color-periwinkle: #c2c8ff; /* brand secondary (light)*/
   --color-shade: #101828; /* drop shadow color from shipfaster ui*/
 
@@ -38,6 +39,10 @@
 
 @utility bg-darken {
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+@utility bg-slightly-darken {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 @layer utilities {

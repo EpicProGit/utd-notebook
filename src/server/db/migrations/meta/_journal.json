@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1769499993617,
+      "tag": "0000_damp_the_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1769549527951,
+      "tag": "0001_loose_phantom_reporter",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769581405459,
+      "tag": "0002_aberrant_darkstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1769630952477,
+      "tag": "0003_puzzling_paper_doll",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772063855671,
+      "tag": "0004_windy_rogue",
+      "breakpoints": true
+    }
+  ]
+}
