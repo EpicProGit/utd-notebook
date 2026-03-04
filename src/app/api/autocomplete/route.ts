@@ -2,13 +2,13 @@
 import { NextResponse } from 'next/server';
 
 import autocompleteGraph from 'src/data/autocomplete_graph.json';
-import { getGraph, searchAutocomplete } from 'src/modules/autocomplete';
+import { getGraph, searchAutocomplete } from '@src/modules/autocomplete/autocomplete';
 import type { GenericFetchedData } from 'src/types/GenericFetchedData';
 import { type SearchQuery } from 'src/types/SearchQuery';
 
 const graph = getGraph(autocompleteGraph as object);
 
-export async function GET(request: Request) {
+export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const input = searchParams.get('input');
   if (typeof input !== 'string') {

@@ -8,8 +8,31 @@ import {
   searchQueryLabel,
 } from '../types/SearchQuery';
 
+interface ProfessorData {
+  first_name?: string;
+  last_name?: string;
+}
+
+interface SectionData {
+  professors: ProfessorData[];
+}
+
+interface AcademicSessionData {
+  sections: SectionData[];
+}
+
+interface CourseNumberData {
+  course_number: string;
+  title: string;
+  academic_sessions: AcademicSessionData[];
+}
+
+interface PrefixData {
+  subject_prefix: string;
+  course_numbers: CourseNumberData[];
+}
 // tell compiler that aggregatedData DOES have data member
-const aggregatedData = aggregatedDataRaw as { data: any[] };
+const aggregatedData = aggregatedDataRaw as { data: PrefixData[] };
 
 export type TableType = { [key: string]: SearchQuery[] };
 
@@ -27,12 +50,14 @@ function addCourse(title: string, prefix: string, number: string) {
 
 for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
   const prefixData = aggregatedData.data[prefixItr];
+  if (!prefixData) continue; //handle blank data)
   for (
     let courseNumberItr = 0;
     courseNumberItr < prefixData.course_numbers.length;
     courseNumberItr++
   ) {
     const courseNumberData = prefixData.course_numbers[courseNumberItr];
+    if (!courseNumberData) continue; //handle blank data
     addCourse(
       courseNumberData.title,
       prefixData.subject_prefix,

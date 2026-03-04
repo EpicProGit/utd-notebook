@@ -22,7 +22,7 @@ export function getGraph(data: object) {
   graph.import(data);
   graph.updateEachNodeAttributes((node, attr) => {
     return {
-      ...attr,
+      ...attr, 
       visited: false,
     };
   });
@@ -74,7 +74,7 @@ class PriorityQueue {
 }
 
 // bfs search from node in DAG, only until next result can be returned
-function bfsRecursionToNextData(graph: DirectedGraph, queue: PriorityQueue) {
+function bfsRecursionToNextData(graph: DirectedGraph<NodeAttributes>, queue: PriorityQueue) {
   const queueItem = queue.dequeue();
   //satisfy typescript possibly undefined error
   if (typeof queueItem === 'undefined') {
@@ -117,7 +117,7 @@ function bfsRecursionToNextData(graph: DirectedGraph, queue: PriorityQueue) {
 }
 
 // bfs search from node in DAG, adding children to priorirty queue if parant matches search string
-function bfsRecursion(graph: DirectedGraph, queue: PriorityQueue) {
+function bfsRecursion(graph: DirectedGraph<NodeAttributes>, queue: PriorityQueue) {
   const queueItem = queue.dequeue();
   //satisfy typescript possibly undefined error
   if (typeof queueItem === 'undefined') {
@@ -227,7 +227,7 @@ type bfsReturn = SearchQuery | undefined;
 
 // search autocomplete program using a DAG (more specifically a radix tree) to search for matches until limit is reached
 export function searchAutocomplete(
-  graph: DirectedGraph,
+  graph: DirectedGraph<NodeAttributes>,
   query: string,
   limit: number,
   searchBy = 'any',

@@ -10,8 +10,32 @@ import aggregatedDataRaw from '../data/aggregated_data.json';
 import professor_to_alias from '../data/professor_to_alias.json';
 import { decodeSearchQueryLabel, type SearchQuery } from '../types/SearchQuery';
 
+interface ProfessorData {
+  first_name?: string;
+  last_name?: string;
+}
+
+interface SectionData {
+  professors: ProfessorData[];
+}
+
+interface AcademicSessionData {
+  sections: SectionData[];
+}
+
+interface CourseNumberData {
+  course_number: string;
+  academic_sessions: AcademicSessionData[];
+}
+
+interface PrefixData {
+  subject_prefix: string;
+  course_numbers: CourseNumberData[];
+}
+
+
 // tell compiler that aggregatedData DOES have data member
-const aggregatedData = aggregatedDataRaw as { data: any[] };
+const aggregatedData = aggregatedDataRaw as { data: PrefixData[] };
 
 export type NodeAttributes = {
   c: string;
@@ -138,12 +162,15 @@ function addProfessor(
 
 for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
   const prefixData = aggregatedData.data[prefixItr];
+  if (!prefixData) continue; //handle blank data
+  
   for (
     let courseNumberItr = 0;
     courseNumberItr < prefixData.course_numbers.length;
     courseNumberItr++
   ) {
     const courseNumberData = prefixData.course_numbers[courseNumberItr];
+    if (!courseNumberData) continue; //handle blank data
     addCourse(prefixData.subject_prefix, courseNumberData.course_number);
     for (
       let academicSessionItr = 0;
@@ -152,25 +179,28 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
     ) {
       const academicSessionData =
         courseNumberData.academic_sessions[academicSessionItr];
+      if (!academicSessionData) continue; //handle blank data
       for (
         let sectionItr = 0;
         sectionItr < academicSessionData.sections.length;
         sectionItr++
       ) {
         const sectionData = academicSessionData.sections[sectionItr];
+        if (!sectionData) continue; //handle blank data
         for (
           let professorItr = 0;
           professorItr < sectionData.professors.length;
           professorItr++
         ) {
           const professorData = sectionData.professors[professorItr];
+          if (!professorData) continue; //handle blank data
           if (
             'first_name' in professorData && //handle empty professor: {}
             'last_name' in professorData &&
             professorData.first_name !== '' && //handle blank name
             professorData.last_name !== ''
           ) {
-            addProfessor(professorData.first_name, professorData.last_name);
+            addProfessor(professorData.first_name!, professorData.last_name!);
           }
         }
       }

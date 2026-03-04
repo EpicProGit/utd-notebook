@@ -14,7 +14,7 @@ if (typeof API_KEY !== 'string') {
     Accept: 'application/json',
   };
 
-  fetch('https://api.utdnebula.com/autocomplete/dag', {
+  await fetch('https://api.utdnebula.com/autocomplete/dag', {
     method: 'GET',
     headers: headers,
   })
