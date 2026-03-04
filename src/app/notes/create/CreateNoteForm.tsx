@@ -88,7 +88,8 @@ const FileForm = () => {
         heading="Create New Note"
         description="Upload a new note here to help future students."
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <div className="w-full lg:w-5/12">
           <form.AppField name="file">
             {(field) => (
               <FormFile
@@ -109,6 +110,8 @@ const FileForm = () => {
               />
             )}
           </form.AppField>
+          </div>
+          <div className="flex flex-col gap-4 w-full lg:w-7/12">
           <form.AppField name="name">
             {(field) => <field.TextField label="Name" className="w-full" />}
           </form.AppField>
@@ -139,6 +142,7 @@ const FileForm = () => {
           <form.AppField name="section">
             {(field) => <field.TextField label="Section" className="w-full" />}
           </form.AppField>
+          </div>
         </div>
         <div className="flex flex-wrap justify-end items-center gap-2">
           <form.AppForm>
