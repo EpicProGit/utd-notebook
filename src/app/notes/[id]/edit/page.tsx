@@ -11,8 +11,10 @@ type EditNotePageProps = {
 };
 
 export default async function EditNotePage({ params }: EditNotePageProps) {
-  const { id } = await params;
-  const session = await auth.api.getSession({ headers: await headers() });
+  const [{ id }, session] = await Promise.all([
+    params,
+    auth.api.getSession({ headers: await headers() }),
+  ]);
   if (!session) redirect(await signInRoute(`notes/${id}/edit`));
 
   const file = await api.file.byId({ id });
