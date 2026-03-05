@@ -29,15 +29,20 @@ export default function FormTextField({
 }: FormTextFieldFieldProps) {
   const field = useFieldContext<string>();
   const currentLength = field.state.value?.length ?? 0;
-  const characterCount = maxLength ? `${currentLength}/${maxLength} characters` : '';
+  const characterCount = maxLength
+    ? `${currentLength}/${maxLength} characters`
+    : '';
   const errorMessage = !field.state.meta.isValid
     ? field.state.meta.errors.map((err) => err?.message).join('. ') + '.'
     : undefined;
 
-  const displayHelperText = [
-    errorMessage || (typeof helperText === 'string' ? helperText : ''),
-    characterCount
-  ].filter(Boolean).join(' ') || undefined;
+  const displayHelperText =
+    [
+      errorMessage || (typeof helperText === 'string' ? helperText : ''),
+      characterCount,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   return (
     <StyledTextField

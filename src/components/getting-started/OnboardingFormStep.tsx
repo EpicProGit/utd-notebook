@@ -38,7 +38,11 @@ const OnboardingFormStep = withForm({
                 </form.AppField>
                 <form.AppField name="lastName">
                   {(field) => (
-                    <field.TextField label="Last Name" maxLength={100} className="grow" />
+                    <field.TextField
+                      label="Last Name"
+                      maxLength={100}
+                      className="grow"
+                    />
                   )}
                 </form.AppField>
               </form.Question>
