@@ -7,7 +7,10 @@ import Panel, { PanelSkeleton } from '@src/components/common/Panel';
 import FormFile from '@src/components/form/FormFile';
 import { useTRPC } from '@src/trpc/react';
 import { useAppForm } from '@src/utils/form';
-import { createFileFormSchema } from '@src/utils/formSchemas';
+import {
+  createFileFormSchema,
+  editFileFormSchema,
+} from '@src/utils/formSchemas';
 import { useUploadToUploadURL } from '@src/utils/uploadFile';
 
 type NoteFormProps =
@@ -116,9 +119,7 @@ const NoteForm = ({ mode = 'create', file: existingFile }: NoteFormProps) => {
       onChange:
         mode === 'create'
           ? createFileFormSchema
-          : createFileFormSchema.extend({
-              section: createFileFormSchema.shape.section.optional(),
-            }),
+          : editFileFormSchema.omit({ id: true }),
     },
   });
 
