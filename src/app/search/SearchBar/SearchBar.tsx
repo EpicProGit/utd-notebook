@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import {
   Autocomplete,
   Button,
@@ -9,13 +10,12 @@ import {
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { type Key, useEffect, useRef, useState } from 'react';
-
+import React, { useEffect, useRef, useState, type Key } from 'react';
 import {
   decodeSearchQueryLabel,
-  type SearchQuery,
   searchQueryEqual,
   searchQueryLabel,
+  type SearchQuery,
 } from '@src/modules/SearchQuery/SearchQuery';
 
 /**
@@ -117,19 +117,17 @@ const SearchBar = ({
     }
   }
 
-  //update url with what's in value
   function updateQueries(newValue: SearchQuery[]) {
     if (typeof manageQuery !== 'undefined') {
-      const params = new URLSearchParams(searchParams.toString());
-      if (newValue.length > 0) {
-        params.set(
-          'searchTerms',
-          newValue.map((el) => searchQueryLabel(el)).join(','),
+      // Navigate to notes page based on search term
+      const term = newValue[0];
+      if (term?.prefix && term?.number) {
+        router.push(`/notes/${term.prefix.toLowerCase()}/${term.number}`);
+      } else if (term?.profFirst && term?.profLast) {
+        router.push(
+          `/notes/professor/${term.profFirst.toLowerCase()}-${term.profLast.toLowerCase()}`,
         );
-      } else {
-        params.delete('searchTerms');
       }
-      router.push(`?${params.toString()}`);
     }
   }
 
