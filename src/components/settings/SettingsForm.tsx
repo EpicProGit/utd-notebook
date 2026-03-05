@@ -3,14 +3,13 @@
 import Alert from '@mui/material/Alert';
 import { auth } from '@src/server/auth';
 import { SelectUserMetadata } from '@src/server/db/models';
+import type { SelectFile } from '@src/server/db/models';
 import { api } from '@src/trpc/server';
+import CreatedNotes from '../form/CreatedNotes';
 import DeleteAccount from './forms/DeleteAccount';
 import UserInfo from './forms/UserInfo';
 import Username from './forms/Username';
-import CreatedNotes from '../form/CreatedNotes';
 import SettingsHeader from './SettingsHeader';
-import type { SelectFile } from '@src/server/db/models';
-
 
 async function SettingsForm({
   session,
@@ -20,12 +19,12 @@ async function SettingsForm({
   const user = session.user;
 
   let userData: SelectUserMetadata | undefined = undefined;
-let createdNotes: SelectFile[] = [];
+  let createdNotes: SelectFile[] = [];
   // Concurrently run procedures
-await Promise.allSettled([
-  api.userMetadata.byId({ id: user.id }),
- api.file.byAuthor({ authorId: user.id }),
-]).then(([userDataResult, notesResult]) => {
+  await Promise.allSettled([
+    api.userMetadata.byId({ id: user.id }),
+    api.file.byAuthor({ authorId: user.id }),
+  ]).then(([userDataResult, notesResult]) => {
     if (userDataResult.status === 'fulfilled' && userDataResult.value) {
       userData = userDataResult.value;
     } else if (userDataResult.status === 'rejected') {
