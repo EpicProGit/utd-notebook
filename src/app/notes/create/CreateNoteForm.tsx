@@ -113,7 +113,7 @@ const FileForm = () => {
           </div>
           <div className="flex flex-col gap-4 w-full lg:w-7/12">
             <form.AppField name="name">
-              {(field) => <field.TextField label="Name" className="w-full" />}
+              {(field) => <field.TextField label="Name" maxLength={100} className="w-full" />}
             </form.AppField>
             <form.AppField name="description">
               {(field) => (
@@ -121,6 +121,7 @@ const FileForm = () => {
                   label="Description"
                   multiline
                   minRows={4}
+                  maxLength={1000}
                   helperText={
                     <span>
                       We support{' '}
