@@ -21,11 +21,7 @@ const NewSidebar = ({
 
   return (
     <>
-      <Tooltip
-        title="Menu"
-        enterDelay={0}
-        arrow
-      >
+      <Tooltip title="Menu" enterDelay={0} arrow>
         <IconButton
           onClick={() => setOpen(true)}
           className={`z-50 ${homepage ? ' drop-shadow-[0_0_4px_rgb(0_0_0_/_0.4)]' : ''}`}
@@ -34,13 +30,15 @@ const NewSidebar = ({
         >
           <MenuIcon
             fontSize="inherit"
-            className={`${hamburgerColor?.startsWith('light') ? 'fill-white' : 'fill-haiti'
-              } ${hamburgerColor === 'lightDark'
+            className={`${
+              hamburgerColor?.startsWith('light') ? 'fill-white' : 'fill-haiti'
+            } ${
+              hamburgerColor === 'lightDark'
                 ? 'dark:fill-haiti'
                 : hamburgerColor === 'darkLight'
                   ? 'dark:fill-white'
                   : ''
-              }`}
+            }`}
           />
         </IconButton>
       </Tooltip>

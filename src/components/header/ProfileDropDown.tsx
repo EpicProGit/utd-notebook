@@ -47,11 +47,7 @@ export const ProfileDropDown = ({ shadow = false }: Props) => {
 
   return (
     <>
-      <Tooltip
-        title="Settings"
-        enterDelay={0}
-        arrow
-      >
+      <Tooltip title="Settings" enterDelay={0} arrow>
         <Avatar
           alt={session?.user.name ?? undefined}
           src={session?.user.image ?? undefined}
@@ -122,7 +118,7 @@ export const ProfileDropDown = ({ shadow = false }: Props) => {
               </MenuItem>
             </MenuList>
           </Card>
-        </Popover >
+        </Popover>
       )}
     </>
   );
