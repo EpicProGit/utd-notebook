@@ -5,7 +5,7 @@ import { auth } from '@src/server/auth';
 import { SelectUserMetadata } from '@src/server/db/models';
 import type { SelectFile } from '@src/server/db/models';
 import { api } from '@src/trpc/server';
-import CreatedNotes from '../form/CreatedNotes';
+import CreatedNotes from '@src/components/form/CreatedNotes';
 import DeleteAccount from './forms/DeleteAccount';
 import UserInfo from './forms/UserInfo';
 import Username from './forms/Username';
@@ -51,7 +51,6 @@ async function SettingsForm({
       {userData && <Username user={userData} />}
       {userData && <UserInfo user={userData} />}
 
-      {/* New Created Notes section */}
       <CreatedNotes createdNotes={createdNotes} />
 
       <DeleteAccount />
