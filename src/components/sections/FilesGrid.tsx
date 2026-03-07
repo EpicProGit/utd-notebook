@@ -1,7 +1,7 @@
+import type { ReactNode } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SectionWithFiles } from '@src/server/db/models';
 import FileCard from './FileCard';
-import type { ReactNode } from 'react';
 
 type FilesGridProps = {
   files: SectionWithFiles['files'];
