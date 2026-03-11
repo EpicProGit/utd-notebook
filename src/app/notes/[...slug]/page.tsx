@@ -10,6 +10,7 @@ import {
   parseNoteSlug,
   type NoteQuery,
 } from '@src/utils/noteSlug';
+import NoteFilter from './NotesFilter';
 
 type NotesPageProps = {
   params: Promise<{ slug: string[] }>;
@@ -121,6 +122,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
   return (
     <>
+
       <SectionHeader
         title={noteQueryToTitle(query)}
         description={noteQueryToDescription(query)}
@@ -168,7 +170,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
           )}
 
           {/* Notes grouped by section */}
-          {sections.map((s) => (
+          {/* {sections.map((s) => (
             <div key={s.id} className="col-span-full">
               <h2 className="mb-3 text-lg font-semibold">
                 {s.prefix} {s.number}.{s.sectionCode} — {s.term} {s.year}
@@ -178,7 +180,12 @@ export default async function NotesPage({ params }: NotesPageProps) {
               </h2>
               <FilesGrid files={s.files} />
             </div>
-          ))}
+          ))} */}
+
+          {/* Filterable notes */}
+          <div className="col-span-full">
+            <NoteFilter sections={sections} />
+          </div>
         </div>
       )}
     </>
