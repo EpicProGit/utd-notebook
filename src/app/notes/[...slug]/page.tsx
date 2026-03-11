@@ -1,5 +1,4 @@
 import EmptyStateCard from '@src/components/sections/EmptyStateCard';
-import FilesGrid from '@src/components/sections/FilesGrid';
 import LinkCard from '@src/components/sections/LinkCard';
 import SectionHeader from '@src/components/sections/SectionHeader';
 import type { SectionWithFiles } from '@src/server/db/models';
@@ -122,7 +121,6 @@ export default async function NotesPage({ params }: NotesPageProps) {
 
   return (
     <>
-
       <SectionHeader
         title={noteQueryToTitle(query)}
         description={noteQueryToDescription(query)}
@@ -168,19 +166,6 @@ export default async function NotesPage({ params }: NotesPageProps) {
               })()}
             </>
           )}
-
-          {/* Notes grouped by section */}
-          {/* {sections.map((s) => (
-            <div key={s.id} className="col-span-full">
-              <h2 className="mb-3 text-lg font-semibold">
-                {s.prefix} {s.number}.{s.sectionCode} — {s.term} {s.year}
-                <span className="ml-2 text-sm font-normal text-slate-600 dark:text-slate-400">
-                  {s.profFirst} {s.profLast}
-                </span>
-              </h2>
-              <FilesGrid files={s.files} />
-            </div>
-          ))} */}
 
           {/* Filterable notes */}
           <div className="col-span-full">

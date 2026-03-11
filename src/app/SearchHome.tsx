@@ -1,32 +1,14 @@
 'use client';
 
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import NebulaLogo from '@src/icons/NebulaLogo';
-import fetchWithCache, {
-  cacheIndexNebula,
-  expireTime,
-} from '@src/modules/fetchWithCache/fetchWithCache';
-import type { GenericFetchedData } from '@src/modules/GenericFetchedData/GenericFetchedData';
-import {
-  decodeSearchQueryLabel,
-  searchQueryLabel,
-  type SearchQuery,
-} from '@src/modules/SearchQuery/SearchQuery';
 import SearchBar from './search/SearchBar/SearchBar';
 
 // ... your interfaces, getSearchTerms, combosSearchResultsFetch, fetchSearchResults functions ...
 
 const SearchHome = () => {
   const searchParams = useSearchParams();
-  const [courses, setCourses] = useState<SearchQuery[]>([]);
-  const [professors, setProfessors] = useState<SearchQuery[]>([]);
-  const [results, setResults] = useState<GenericFetchedData<SearchQuery[]>>({
-    state: 'loading',
-  });
 
   useEffect(() => {
     // ... your existing search logic ...

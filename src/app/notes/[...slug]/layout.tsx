@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import Header from '@src/components/header/Header';
 import HeaderHome from '@src/components/header/HeaderHome';
 
 type NotesLayoutProps = {

@@ -1,13 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import { useState } from 'react';
 import FilesGrid from '@src/components/sections/FilesGrid';
 import type { SectionWithFiles } from '@src/server/db/models';
 
-export default function NoteFilter({ sections }: { sections: SectionWithFiles[] }) {
+export default function NoteFilter({
+  sections,
+}: {
+  sections: SectionWithFiles[];
+}) {
   const [search, setSearch] = useState('');
 
   const query = search.toLowerCase();
@@ -15,12 +19,13 @@ export default function NoteFilter({ sections }: { sections: SectionWithFiles[] 
   const filteredSections = sections
     .map((s) => ({
       ...s,
-      files: s.files.filter((f) =>
-        f.name.toLowerCase().includes(query) ||
-        `${s.profFirst} ${s.profLast}`.toLowerCase().includes(query) ||
-        `${s.term} ${s.year}`.toLowerCase().includes(query) ||
-        `${s.prefix} ${s.number}`.toLowerCase().includes(query) ||
-        `${s.sectionCode}`.toLowerCase().includes(query)
+      files: s.files.filter(
+        (f) =>
+          f.name.toLowerCase().includes(query) ||
+          `${s.profFirst} ${s.profLast}`.toLowerCase().includes(query) ||
+          `${s.term} ${s.year}`.toLowerCase().includes(query) ||
+          `${s.prefix} ${s.number}`.toLowerCase().includes(query) ||
+          `${s.sectionCode}`.toLowerCase().includes(query),
       ),
     }))
     .filter((s) => s.files.length > 0);

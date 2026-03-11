@@ -9,10 +9,9 @@ import {
 } from '@mui/material';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState, type Key } from 'react';
 import {
-  decodeSearchQueryLabel,
   searchQueryEqual,
   searchQueryLabel,
   type SearchQuery,
@@ -72,15 +71,6 @@ const SearchBar = ({
 
   //set value from query
   const router = useRouter();
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    const searchTerms = searchParams.get('searchTerms');
-    if (searchTerms) {
-      const array = searchTerms.split(',');
-      setValue(array.map((el) => decodeSearchQueryLabel(el)));
-    }
-  }, [searchParams]); // useEffect is called every time the query changes
-
   // updateValue -> onSelect_internal -> updateQueries - clicking enter on an autocomplete suggestion in TopMenu Searchbar
   // updateValue -> onSelect_internal -> onSelect (custom function) - clicking enter on an autocomplete suggestion in home page SearchBar
   // params.inputProps.onKeyDown -> handleKeyDown -> onSelect_internal -> updateQueries/onSelect - clicking enter in the SearchBar
@@ -102,9 +92,6 @@ const SearchBar = ({
 
   //update parent and queries
   function onSelect_internal(newValue: SearchQuery[]) {
-    const currentTerms = searchParams.get('searchTerms');
-    if (currentTerms === newValue.map((el) => searchQueryLabel(el)).join(','))
-      return;
     setErrorTooltip(!newValue.length);
     if (newValue.length && typeof setResultsLoading !== 'undefined') {
       setResultsLoading();
@@ -257,7 +244,6 @@ const SearchBar = ({
               variant="outlined"
               className={input_className}
               placeholder="ex. GOVT 2306"
-              //eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus={autoFocus}
             />
           );
