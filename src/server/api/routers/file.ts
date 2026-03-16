@@ -23,12 +23,7 @@ export const fileRouter = createTRPCRouter({
     try {
       const byId = await ctx.db.query.file.findFirst({
         where: (file) => eq(file.id, id),
-        with: {
-          section: true,
-          author: {
-            columns: { username: true, firstName: true, lastName: true },
-          },
-        },
+        with: { section: true, author: true },
       });
 
       return byId;
@@ -38,29 +33,6 @@ export const fileRouter = createTRPCRouter({
       throw e;
     }
   }),
-  byAuthor: protectedProcedure
-    .input(
-      z.object({
-        authorId: z.string(),
-      }),
-    )
-    .query(async ({ input, ctx }) => {
-      const { authorId } = input;
-
-      const files = await ctx.db.query.file.findMany({
-        where: (file) => eq(file.authorId, authorId),
-        orderBy: (file, { desc }) => [desc(file.updatedAt)],
-        with: {
-          section: true,
-          author: {
-            columns: { username: true, firstName: true, lastName: true },
-          },
-        },
-      });
-
-      return files;
-    }),
-
   create: protectedProcedure
     .input(createFileSchema)
     .mutation(async ({ input, ctx }) => {
@@ -175,10 +147,9 @@ export const fileRouter = createTRPCRouter({
         throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
 
-      await Promise.all([
-        callStorageAPI('DELETE', file.id),
-        ctx.db.delete(files).where(eq(files.id, input.id)),
-      ]);
+      await callStorageAPI('DELETE', file.id);
+
+      await ctx.db.delete(files).where(eq(files.id, input.id));
 
       return { success: true };
     }),
@@ -192,9 +163,6 @@ export const fileRouter = createTRPCRouter({
           : undefined,
         with: {
           section: true,
-          author: {
-            columns: { username: true, firstName: true, lastName: true },
-          },
         },
       });
 
