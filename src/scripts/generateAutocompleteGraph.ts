@@ -5,7 +5,6 @@ To create graph, do npm run buildautocomplete
 */
 import { writeFileSync } from 'fs';
 import { DirectedGraph } from 'graphology';
-
 import aggregatedDataRaw from '../data/aggregated_data.json';
 import professor_to_alias from '../data/professor_to_alias.json';
 import { decodeSearchQueryLabel, type SearchQuery } from '../types/SearchQuery';
@@ -32,7 +31,6 @@ interface PrefixData {
   subject_prefix: string;
   course_numbers: CourseNumberData[];
 }
-
 
 // tell compiler that aggregatedData DOES have data member
 const aggregatedData = aggregatedDataRaw as { data: PrefixData[] };
@@ -77,7 +75,7 @@ function addSearchQueryCharacter(
   }
   if (characters.length == 1) {
     const attributes: NodeAttributes = {
-      c: characters[0] ?? "",
+      c: characters[0] ?? '',
       visited: false,
     };
     if (typeof data !== 'undefined') {
@@ -88,7 +86,7 @@ function addSearchQueryCharacter(
     return newNode;
   }
   const newNode = graph.addNode(numNodes++, {
-    c: characters[0] ?? "",
+    c: characters[0] ?? '',
     visited: false,
   });
   graph.addEdgeWithKey(numEdges++, node, newNode);
@@ -104,7 +102,7 @@ function addWithParents(
 ) {
   const nodeFirstChar = addSearchQueryCharacter(
     nodes.shift() as string,
-    characters[0] ?? "",
+    characters[0] ?? '',
     characters.length > 1 ? undefined : data,
   );
   while (nodes.length) {
@@ -150,7 +148,7 @@ function addProfessor(
   const nodes = [root];
   for (const name of firstNames) {
     //push to start, order is specific for addWithParents
-    nodes.unshift(addSearchQueryCharacter(nodes[0] ?? "", name + ' '));
+    nodes.unshift(addSearchQueryCharacter(nodes[0] ?? '', name + ' '));
   }
   // if it is an alias, map the alias path to the original professor, else, just insert the professor as graph data
   const data = originalProf ?? {
@@ -163,7 +161,7 @@ function addProfessor(
 for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
   const prefixData = aggregatedData.data[prefixItr];
   if (!prefixData) continue; //handle blank data
-  
+
   for (
     let courseNumberItr = 0;
     courseNumberItr < prefixData.course_numbers.length;

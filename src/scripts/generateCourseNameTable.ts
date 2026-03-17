@@ -1,11 +1,10 @@
 // build table with: npm run buildcoursenames
 import { writeFileSync } from 'fs';
-
 import aggregatedDataRaw from '../data/aggregated_data.json';
 import {
   convertToCourseOnly,
-  type SearchQuery,
   searchQueryLabel,
+  type SearchQuery,
 } from '../types/SearchQuery';
 
 interface ProfessorData {

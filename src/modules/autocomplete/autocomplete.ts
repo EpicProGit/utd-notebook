@@ -1,12 +1,11 @@
 import { DirectedGraph } from 'graphology';
-
 import untypedCoursePrefixNumberTable from 'src/data/course_prefix_number_table.json';
 import type { NodeAttributes } from 'src/scripts/generateAutocompleteGraph';
 import {
   convertToCourseOnly,
-  type SearchQuery,
   searchQueryEqual,
   searchQueryLabel,
+  type SearchQuery,
 } from 'src/types/SearchQuery';
 
 const root = '0';
@@ -22,7 +21,7 @@ export function getGraph(data: object) {
   graph.import(data);
   graph.updateEachNodeAttributes((node, attr) => {
     return {
-      ...attr, 
+      ...attr,
       visited: false,
     };
   });
@@ -74,7 +73,10 @@ class PriorityQueue {
 }
 
 // bfs search from node in DAG, only until next result can be returned
-function bfsRecursionToNextData(graph: DirectedGraph<NodeAttributes>, queue: PriorityQueue) {
+function bfsRecursionToNextData(
+  graph: DirectedGraph<NodeAttributes>,
+  queue: PriorityQueue,
+) {
   const queueItem = queue.dequeue();
   //satisfy typescript possibly undefined error
   if (typeof queueItem === 'undefined') {
@@ -117,7 +119,10 @@ function bfsRecursionToNextData(graph: DirectedGraph<NodeAttributes>, queue: Pri
 }
 
 // bfs search from node in DAG, adding children to priorirty queue if parant matches search string
-function bfsRecursion(graph: DirectedGraph<NodeAttributes>, queue: PriorityQueue) {
+function bfsRecursion(
+  graph: DirectedGraph<NodeAttributes>,
+  queue: PriorityQueue,
+) {
   const queueItem = queue.dequeue();
   //satisfy typescript possibly undefined error
   if (typeof queueItem === 'undefined') {
