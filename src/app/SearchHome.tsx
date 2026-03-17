@@ -1,19 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 import NebulaLogo from '@src/icons/NebulaLogo';
 import SearchBar from './search/SearchBar/SearchBar';
 
-// ... your interfaces, getSearchTerms, combosSearchResultsFetch, fetchSearchResults functions ...
-
 const SearchHome = () => {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // ... your existing search logic ...
-  }, [searchParams]);
-
   return (
     <section className="h-screen">
       <div className="flex h-full w-full flex-col items-center justify-center overflow-visible">
