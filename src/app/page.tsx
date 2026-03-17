@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Header from '@src/components/header/Header';
 import SearchHome from './SearchHome';
 
@@ -20,7 +21,9 @@ const Home = () => {
           itemVisibility={{ search: false }}
           color="light"
         />
-        <SearchHome />
+        <Suspense>
+          <SearchHome />
+        </Suspense>
       </div>
     </main>
   );
