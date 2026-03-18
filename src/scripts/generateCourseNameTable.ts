@@ -5,7 +5,7 @@ import {
   convertToCourseOnly,
   searchQueryLabel,
   type SearchQuery,
-} from '../types/SearchQuery';
+} from '../modules/SearchQuery/SearchQuery';
 
 interface ProfessorData {
   first_name?: string;

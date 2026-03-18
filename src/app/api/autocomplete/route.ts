@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import autocompleteGraph from 'src/data/autocomplete_graph.json';
-import type { GenericFetchedData } from 'src/types/GenericFetchedData';
-import { type SearchQuery } from 'src/types/SearchQuery';
+import type { GenericFetchedData } from 'src/modules/GenericFetchedData/GenericFetchedData';
+import { type SearchQuery } from 'src/modules/SearchQuery/SearchQuery';
 import {
   getGraph,
   searchAutocomplete,
@@ -35,7 +35,7 @@ export function GET(request: Request) {
 
   return NextResponse.json(
     {
-      message: 'success',
+      state: 'done',
       data: results,
     } satisfies GenericFetchedData<SearchQuery[]>,
     { status: 200 },

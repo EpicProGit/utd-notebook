@@ -5,12 +5,12 @@ Taken from UTD Trends; run with npm run fetchdata
 import { writeFileSync } from 'fs';
 import 'dotenv/config';
 
-const API_KEY = process.env.NEBULA_API_KEY;
-if (typeof API_KEY !== 'string') {
-  console.error('API key is undefined');
+const API_URL = process.env.NEBULA_API_URL;
+if (typeof API_URL !== 'string') {
+  console.error('API URL is undefined');
 } else {
   const headers = {
-    'x-api-key': API_KEY,
+    'x-api-key': API_URL,
     Accept: 'application/json',
   };
 

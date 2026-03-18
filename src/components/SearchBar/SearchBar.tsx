@@ -3,7 +3,6 @@
 import {
   Autocomplete,
   Button,
-  CircularProgress,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -21,17 +20,13 @@ import {
  * api response type for autocomplete endpoint
  */
 interface AutocompleteResponse {
-  message: string;
+  state: string;
   data: SearchQuery[];
 }
 /**
  * Props type used by the SearchBar component
  */
 interface SearchProps {
-  manageQuery?: 'onSelect';
-  onSelect?: (value: SearchQuery[]) => void;
-  resultsLoading?: 'loading' | 'done' | 'error';
-  setResultsLoading?: () => void;
   className?: string;
   input_className?: string;
   autoFocus?: boolean;
@@ -44,10 +39,6 @@ interface SearchProps {
  * Styled for the splash page
  */
 const SearchBar = ({
-  manageQuery,
-  onSelect,
-  resultsLoading,
-  setResultsLoading,
   className,
   input_className,
   autoFocus,
@@ -93,28 +84,22 @@ const SearchBar = ({
   //update parent and queries
   function onSelect_internal(newValue: SearchQuery[]) {
     setErrorTooltip(!newValue.length);
-    if (newValue.length && typeof setResultsLoading !== 'undefined') {
-      setResultsLoading();
-    }
-    if (typeof onSelect !== 'undefined') {
-      onSelect(newValue);
-    }
-    if (newValue.length && manageQuery === 'onSelect') {
+    if (newValue.length) {
       void updateQueries(newValue);
     }
   }
 
   function updateQueries(newValue: SearchQuery[]) {
-    if (typeof manageQuery !== 'undefined') {
-      // Navigate to notes page based on search term
-      const term = newValue[0];
-      if (term?.prefix && term?.number) {
-        router.push(`/notes/${term.prefix.toLowerCase()}/${term.number}`);
-      } else if (term?.profFirst && term?.profLast) {
-        router.push(
-          `/notes/professor/${term.profFirst.toLowerCase()}-${term.profLast.toLowerCase()}`,
-        );
-      }
+    // Navigate to notes page based on search term
+    const term = newValue[0];
+    if (term?.prefix && term?.number) {
+      router.push(
+        `/notes/${term.prefix.toLowerCase()}/${term.number}`,
+      );
+    } else if (term?.profFirst && term?.profLast) {
+      router.push(
+        `/notes//${term.profFirst.toLowerCase()}/${term.profLast.toLowerCase()}`,
+      );
     }
   }
 
@@ -136,8 +121,9 @@ const SearchBar = ({
     )
       .then((response) => response.json() as Promise<AutocompleteResponse>)
       .then((data) => {
-        if (data.message !== 'success') {
-          throw new Error(data.message);
+        if (data.state !== 'done') {
+          console.error('Autocomplete API error:', data.state, data);
+          throw new Error(data.state);
         }
         //remove currently chosen values
         const filtered = data.data.filter(
@@ -325,11 +311,11 @@ const SearchBar = ({
           } //darkens the text when no valid search terms are entered (pseudo-disables the search button)
           onClick={() => onSelect_internal(value)}
         >
-          {resultsLoading === 'loading' ? (
+          {/* {resultsLoading === 'loading' ? (
             <CircularProgress className="text-cornflower-50 dark:text-haiti h-6 w-6" />
           ) : (
             'Search'
-          )}
+          )} */}
         </Button>
       </Tooltip>
     </div>

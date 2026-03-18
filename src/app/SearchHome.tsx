@@ -1,7 +1,7 @@
 'use client';
 
 import NebulaLogo from '@src/icons/NebulaLogo';
-import SearchBar from './search/SearchBar/SearchBar';
+import SearchBar from '../components/SearchBar/SearchBar';
 
 const SearchHome = () => {
   return (
@@ -32,7 +32,6 @@ const SearchHome = () => {
         <SearchBar
           className="w-full max-w-xs md:max-w-sm lg:max-w-md"
           input_className="[&_.MuiOutlinedInput-root]:rounded-full [&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-neutral-800"
-          manageQuery="onSelect"
         />
       </div>
     </section>

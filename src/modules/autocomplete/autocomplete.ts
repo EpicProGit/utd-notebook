@@ -6,7 +6,7 @@ import {
   searchQueryEqual,
   searchQueryLabel,
   type SearchQuery,
-} from 'src/types/SearchQuery';
+} from 'src/modules/SearchQuery/SearchQuery';
 
 const root = '0';
 
