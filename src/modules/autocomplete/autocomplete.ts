@@ -1,12 +1,12 @@
 import { DirectedGraph } from 'graphology';
 import untypedCoursePrefixNumberTable from 'src/data/course_prefix_number_table.json';
-import type { NodeAttributes } from 'src/scripts/generateAutocompleteGraph';
 import {
   convertToCourseOnly,
   searchQueryEqual,
   searchQueryLabel,
   type SearchQuery,
 } from 'src/modules/SearchQuery/SearchQuery';
+import type { NodeAttributes } from 'src/scripts/generateAutocompleteGraph';
 
 const root = '0';
 

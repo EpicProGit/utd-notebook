@@ -1,7 +1,7 @@
 'use server';
 
-import SearchBar from '@src/components/SearchBar/SearchBar';
 import Sidebar from '@src/components/nav/Sidebar';
+import SearchBar from '@src/components/SearchBar/SearchBar';
 import { BaseHeader, BaseHeaderProps } from './BaseHeader';
 
 const DefaultHeaderItems = () => <></>;
@@ -10,7 +10,7 @@ const Header = async (props: BaseHeaderProps) => {
   return (
     <BaseHeader
       menu={<Sidebar homepage={props.shadow} hamburgerColor={props.color} />}
-      searchBar={<SearchBar autoFocus={true}/>}
+      searchBar={<SearchBar autoFocus={true} />}
       {...props}
     >
       {props.children}

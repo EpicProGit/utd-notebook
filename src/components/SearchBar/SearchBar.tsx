@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Autocomplete,
-  Button,
-  TextField,
-  Tooltip,
-} from '@mui/material';
+import { Autocomplete, Button, TextField, Tooltip } from '@mui/material';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { useRouter } from 'next/navigation';
@@ -38,11 +33,7 @@ interface SearchProps {
  *
  * Styled for the splash page
  */
-const SearchBar = ({
-  className,
-  input_className,
-  autoFocus,
-}: SearchProps) => {
+const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   //what you can choose from
   const [options, setOptions] = useState<SearchQuery[]>([]);
   //initial loading prop for first load
@@ -93,9 +84,7 @@ const SearchBar = ({
     // Navigate to notes page based on search term
     const term = newValue[0];
     if (term?.prefix && term?.number) {
-      router.push(
-        `/notes/${term.prefix.toLowerCase()}/${term.number}`,
-      );
+      router.push(`/notes/${term.prefix.toLowerCase()}/${term.number}`);
     } else if (term?.profFirst && term?.profLast) {
       router.push(
         `/notes//${term.profFirst.toLowerCase()}/${term.profLast.toLowerCase()}`,
