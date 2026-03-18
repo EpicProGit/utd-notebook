@@ -300,11 +300,7 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
           } //darkens the text when no valid search terms are entered (pseudo-disables the search button)
           onClick={() => onSelect_internal(value)}
         >
-          {/* {resultsLoading === 'loading' ? (
-            <CircularProgress className="text-cornflower-50 dark:text-haiti h-6 w-6" />
-          ) : (
-            'Search'
-          )} */}
+          Search
         </Button>
       </Tooltip>
     </div>
