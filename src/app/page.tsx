@@ -1,5 +1,5 @@
 import Header from '@src/components/header/Header';
-import SearchBar from '@src/components/SearchBar/SearchBar';
+import SearchBar from '@src/components/header/SearchBar';
 import NebulaLogo from '@src/icons/NebulaLogo';
 
 const Home = () => {
