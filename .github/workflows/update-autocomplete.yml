@@ -44,9 +44,6 @@ jobs:
       - name: Build course name table
         run: npm run buildcoursenames
 
-      - name: Build combos table
-        run: npm run buildcombos
-
       - name: Commit changes
         run: |
           git add .

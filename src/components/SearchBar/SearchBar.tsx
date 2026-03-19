@@ -48,20 +48,16 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
     quickInputValue.current = newValue;
     _setInputValue(newValue);
   }
-  //chosen values
-  const [value, setValue] = useState<SearchQuery[]>([]);
+  //chosen value (single)
+  const [value, setValue] = useState<SearchQuery | null>(null);
 
   //set value from query
   const router = useRouter();
-  // updateValue -> onSelect_internal -> updateQueries - clicking enter on an autocomplete suggestion in TopMenu Searchbar
-  // updateValue -> onSelect_internal -> onSelect (custom function) - clicking enter on an autocomplete suggestion in home page SearchBar
-  // params.inputProps.onKeyDown -> handleKeyDown -> onSelect_internal -> updateQueries/onSelect - clicking enter in the SearchBar
-  // Button onClick -> onSelect_internal -> updateQueries/onSelect - Pressing the "Search" Button
 
-  //change all values
-  function updateValue(newValue: SearchQuery[]) {
+  //change value
+  function updateValue(newValue: SearchQuery | null) {
     setValue(newValue);
-    onSelect_internal(newValue); // clicking enter to select a autocomplete suggestion triggers a new search (it also 'Enters' for the searchbar)
+    onSelect_internal(newValue);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -73,26 +69,24 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   }
 
   //update parent and queries
-  function onSelect_internal(newValue: SearchQuery[]) {
-    setErrorTooltip(!newValue.length);
-    if (newValue.length) {
+  function onSelect_internal(newValue: SearchQuery | null) {
+    setErrorTooltip(!newValue);
+    if (newValue) {
       void updateQueries(newValue);
     }
   }
 
-  function updateQueries(newValue: SearchQuery[]) {
-    // Navigate to notes page based on search term
-    const term = newValue[0];
-    if (term?.prefix && term?.number) {
+  function updateQueries(term: SearchQuery) {
+    if (term.prefix && term.number) {
       router.push(`/notes/${term.prefix.toLowerCase()}/${term.number}`);
-    } else if (term?.profFirst && term?.profLast) {
+    } else if (term.profFirst && term.profLast) {
       router.push(
-        `/notes//${term.profFirst.toLowerCase()}/${term.profLast.toLowerCase()}`,
+        `/notes/${term.profFirst.toLowerCase()}/${term.profLast.toLowerCase()}`,
       );
     }
   }
 
-  //fetch new options, add tags if valid
+  //fetch new options
   function loadNewOptions(newInputValue: string) {
     setLoading(true);
     if (newInputValue.trim() === '') {
@@ -114,38 +108,31 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
           console.error('Autocomplete API error:', data.state, data);
           throw new Error(data.state);
         }
-        //remove currently chosen values
+        //remove currently chosen value
         const filtered = data.data.filter(
           (item: SearchQuery) =>
-            value.findIndex((el) => searchQueryEqual(el, item)) === -1,
+            !(value && searchQueryEqual(value, item)),
         );
-        //add to chosen values if only one option and space
+        //auto-select if only one option and space typed
         const noSections = filtered.filter(
           (el: SearchQuery) => !('sectionNumber' in el),
         );
         if (
-          // if the returned options minus already selected values or those options minus sections is 1, then this
-          // means a space following should autocomplete the previous stuff to a chip
           (filtered.length === 1 || noSections.length === 1) &&
-          // if the next character the user typed was a space, then the chip should be autocompleted
-          // this looks at quickInputValue because it is always the most recent state of the field's string input,
-          // so requests that return later will still see that a space was typed after the text to be autocompleted,
-          // so it should autocomplete then when this is realized
           quickInputValue.current.charAt(newInputValue.length) === ' '
         ) {
-          addValue(filtered.length === 1 ? filtered[0]! : noSections[0]!);
+          const selected = filtered.length === 1 ? filtered[0]! : noSections[0]!;
+          setValue(selected);
           const rest = quickInputValue.current
             .slice(newInputValue.length)
             .trimStart();
           setInputValue(rest);
           loadNewOptions(rest.trimEnd());
         } else if (quickInputValue.current === newInputValue) {
-          //still valid options
           setOptions(filtered);
         }
       })
       .catch((error) => {
-        // ignore aborts
         if (!(error instanceof DOMException)) {
           console.error('Autocomplete', error);
         }
@@ -155,11 +142,6 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
       });
   }
 
-  //add value
-  function addValue(newValue: SearchQuery) {
-    setValue((old) => [...old, newValue]);
-  }
-
   useEffect(() => {
     void fetch('/api/autocomplete?input=someSearchTerm');
   }, []);
@@ -167,10 +149,8 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   return (
     <div className={'flex items-center gap-2 ' + (className ?? '')}>
       <Autocomplete
-        multiple
         freeSolo
         loading={loading}
-        //highlight first option to add with enter
         autoHighlight={true}
         clearOnBlur={false}
         className="grow"
@@ -181,29 +161,19 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
           return searchQueryLabel(option);
         }}
         options={options}
-        //don't filter options, done in fetch
         filterOptions={(options) => options}
         value={value}
         onChange={(
           event: React.SyntheticEvent,
-          newValue: (string | SearchQuery)[],
+          newValue: string | SearchQuery | null,
         ) => {
-          //should never happen
-          if (!newValue.every((el) => typeof el !== 'string')) {
+          if (typeof newValue === 'string' || newValue === null) {
             return;
           }
           //remove from options
-          if (newValue.length > value.length) {
-            setOptions((old) =>
-              old.filter(
-                (item) =>
-                  !searchQueryEqual(
-                    newValue[newValue.length - 1] as SearchQuery,
-                    item,
-                  ),
-              ),
-            );
-          }
+          setOptions((old) =>
+            old.filter((item) => !searchQueryEqual(newValue, item)),
+          );
           updateValue(newValue);
         }}
         inputValue={inputValue}
@@ -223,27 +193,22 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
             />
           );
         }}
-        //for handling spaces, when options are already loaded
         onInput={(event) => {
-          const value = (event.target as HTMLInputElement).value;
-          // if the last character in the new string is a space, check for autocomplete
+          const inputVal = (event.target as HTMLInputElement).value;
           if (
-            value[value.length - 1] === ' ' &&
-            // but if the user is deleting text, don't try to autocomplete
+            inputVal[inputVal.length - 1] === ' ' &&
             (event.nativeEvent as InputEvent).inputType === 'insertText'
           ) {
             const noSections = options.filter(
               (el: SearchQuery) => !('sectionNumber' in el),
             );
             if (
-              value.length > 0 &&
-              (options.length === 1 ||
-                //all but one is a section
-                noSections.length === 1)
+              inputVal.length > 0 &&
+              (options.length === 1 || noSections.length === 1)
             ) {
               event.preventDefault();
               event.stopPropagation();
-              addValue(options.length === 1 ? options[0]! : noSections[0]!);
+              setValue(options.length === 1 ? options[0]! : noSections[0]!);
               setOptions([]);
               (event.target as HTMLInputElement).value = '';
             }
@@ -252,7 +217,6 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
         renderOption={(props: { key: Key }, option, { inputValue }) => {
           const text =
             typeof option === 'string' ? option : searchQueryLabel(option);
-          //add spaces between prefix and course number
           const matches = match(
             text,
             inputValue
@@ -294,10 +258,10 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
           size="large"
           className={
             'h-11 w-[5.5rem] shrink-0 normal-case' +
-            (value.length == 0
+            (value === null
               ? ' text-cornflower-200 dark:text-cornflower-700'
               : '')
-          } //darkens the text when no valid search terms are entered (pseudo-disables the search button)
+          }
           onClick={() => onSelect_internal(value)}
         >
           Search

@@ -167,6 +167,7 @@ export default async function NotesPage({ params }: NotesPageProps) {
             </>
           )}
 
+          {/* Notes grouped by section */}
           {sections.map((s) => (
             <div key={s.id} className="col-span-full">
               <h2 className="mb-3 text-lg font-semibold">
