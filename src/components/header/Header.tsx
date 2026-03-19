@@ -1,7 +1,7 @@
 'use server';
 
-import Sidebar from '@src/components/nav/Sidebar';
 import SearchBar from '@src/components/header/SearchBar';
+import Sidebar from '@src/components/nav/Sidebar';
 import { BaseHeader, BaseHeaderProps } from './BaseHeader';
 
 const DefaultHeaderItems = () => <></>;
