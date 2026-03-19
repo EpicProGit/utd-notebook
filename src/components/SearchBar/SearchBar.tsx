@@ -110,8 +110,7 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
         }
         //remove currently chosen value
         const filtered = data.data.filter(
-          (item: SearchQuery) =>
-            !(value && searchQueryEqual(value, item)),
+          (item: SearchQuery) => !(value && searchQueryEqual(value, item)),
         );
         //auto-select if only one option and space typed
         const noSections = filtered.filter(
@@ -121,7 +120,8 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
           (filtered.length === 1 || noSections.length === 1) &&
           quickInputValue.current.charAt(newInputValue.length) === ' '
         ) {
-          const selected = filtered.length === 1 ? filtered[0]! : noSections[0]!;
+          const selected =
+            filtered.length === 1 ? filtered[0]! : noSections[0]!;
           setValue(selected);
           const rest = quickInputValue.current
             .slice(newInputValue.length)
