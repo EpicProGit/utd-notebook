@@ -17,7 +17,7 @@ if (typeof API_URL !== 'string') {
     Accept: 'application/json',
   };
 
-  await fetch('https://api.utdnebula.com/autocomplete/dag', {
+  await fetch(API_URL + '/autocomplete/dag', {
     method: 'GET',
     headers: headers,
   })
