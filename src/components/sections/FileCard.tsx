@@ -75,7 +75,7 @@ export default function FileCard({ file }: FileCardProps) {
         rel="noreferrer"
         className="flex grow flex-col"
       >
-        <div className="overflow-hidden rounded-t-lg border-b border-neutral-200 bg-slate-50 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="overflow-hidden rounded-t-lg border-b border-neutral-200 bg-white dark:border-neutral-600 dark:bg-neutral-700">
           {thumbData ? (
             <div className="relative aspect-[3/4] w-full">
               <Image
