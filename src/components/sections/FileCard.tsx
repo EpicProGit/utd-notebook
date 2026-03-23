@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 import { BaseCard } from '@src/components/common/BaseCard';
 import type { SelectFile } from '@src/server/db/models';
 import { authClient } from '@src/utils/auth-client';
+import NoteDeleteButton from './NoteDeleteButton';
 import NoteEditButton from './NoteEditButton';
 
 type FileCardProps = {
@@ -126,6 +127,7 @@ export default function FileCard({ file }: FileCardProps) {
       {isAuthor && (
         <div className="m-4 mt-0 flex flex-row space-x-2">
           <NoteEditButton fileId={file.id} />
+          <NoteDeleteButton fileId={file.id} />
         </div>
       )}
     </BaseCard>
