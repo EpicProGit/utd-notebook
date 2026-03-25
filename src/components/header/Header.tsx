@@ -12,7 +12,6 @@ const Header = async (props: BaseHeaderProps) => {
       menu={<Sidebar homepage={props.shadow} hamburgerColor={props.color} />}
       searchBar={
         <SearchBar
-          autoFocus={true}
           className="w-full max-w-xs md:max-w-sm lg:max-w-md"
           input_className="[&_.MuiOutlinedInput-root]:rounded-full [&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-neutral-800"
         />
