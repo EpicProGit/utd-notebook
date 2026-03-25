@@ -6,6 +6,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
+  boolean,
 } from 'drizzle-orm/pg-core';
 import { section } from './section';
 import { userMetadata } from './user';
@@ -27,6 +28,8 @@ export const file = pgTable(
 
     name: text('name').notNull(),
     description: text('description'),
+
+    handwritten: boolean().notNull().default(false),
 
     publicUrl: text('public_url').notNull(),
 
