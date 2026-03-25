@@ -133,7 +133,12 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   }, []);
 
   return (
-    <div className={'flex items-center gap-2 ' + (className ?? '')}>
+    <div
+      className={
+        'flex items-center gap-2 w-full max-w-xs md:max-w-sm lg:max-w-md ' +
+        (className ?? '')
+      }
+    >
       <Autocomplete
         freeSolo
         loading={loading}
@@ -172,7 +177,10 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
             <TextField
               {...params}
               variant="outlined"
-              className={input_className}
+              className={
+                '[&_.MuiOutlinedInput-root]:rounded-full [&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-neutral-700 ' +
+                (input_className ?? '')
+              }
               placeholder="ex. GOVT 2306"
               autoFocus={autoFocus}
             />

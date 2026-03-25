@@ -45,11 +45,7 @@ const Home = () => {
             <p className="mb-10 text-center text-white text-base md:text-lg text-shadow-[0_0_4px_rgb(0_0_0_/_0.4)]">
               Share and access course notes. By students, for students.
             </p>
-            <SearchBar
-              className="w-full max-w-xs md:max-w-sm lg:max-w-md"
-              input_className="[&_.MuiOutlinedInput-root]:rounded-full [&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-neutral-800"
-              autoFocus={true}
-            />
+            <SearchBar autoFocus />
           </div>
         </section>
       </div>
