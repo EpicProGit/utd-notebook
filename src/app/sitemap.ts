@@ -9,7 +9,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const professors = (await api.section.getAllProfessors()).map(p => [p.profFirst, p.profLast]);
     const combos = (await api.section.getAllCourseProfessorCombos())
         .map(c => [c.prefix, c.number, c.profFirst, c.profLast]);
-    
+
+    // fetch note ids
+    const notes = (await api.file.byName({name: "", sortByDate: true})).map(f => [f.id]);
+
     // array of all possible note page slugs
     const noteSlugs = [...courses, ...professors, ...combos];
 
@@ -27,11 +30,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         })),
+        // individual notes pages
+        ...notes.map((id) => ({
+            url: `${baseUrl}/notes/${id}`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.8,
+        })),
         { // create note page
             url: `${baseUrl}/notes/create`,
             lastModified: new Date(),
             changeFrequency: 'monthly' as const,
-            priority: .5,
-        }
+            priority: 0.5,
+        },
     ];
 }
