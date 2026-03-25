@@ -1,0 +1,37 @@
+import { MetadataRoute } from 'next';
+import { api } from '@src/trpc/server';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const baseUrl = 'https://notebook.utdnebula.com';
+
+    // fetch all existing courses, profs, and course-prof combos as arrays
+    const courses = (await api.section.getAllCourses()).map(c => [c.prefix, c.number]);
+    const professors = (await api.section.getAllProfessors()).map(p => [p.profFirst, p.profLast]);
+    const combos = (await api.section.getAllCourseProfessorCombos())
+        .map(c => [c.prefix, c.number, c.profFirst, c.profLast]);
+    
+    // array of all possible note page slugs
+    const noteSlugs = [...courses, ...professors, ...combos];
+
+    return [
+        { // homepage
+            url: baseUrl,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 1,
+        },
+        // notes pages
+        ...noteSlugs.map((slugs) => ({
+            url: `${baseUrl}/notes/${slugs.join("/")}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        })),
+        { // create note page
+            url: `${baseUrl}/notes/create`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: .5,
+        }
+    ];
+}
