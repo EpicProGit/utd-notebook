@@ -1,6 +1,8 @@
 'use client';
 
-import { Autocomplete, Button, TextField, Tooltip } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Autocomplete, TextField } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { useRouter } from 'next/navigation';
@@ -37,7 +39,6 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   const [options, setOptions] = useState<SearchQuery[]>([]);
   //initial loading prop for first load
   const [loading, setLoading] = useState(false);
-  const [openErrorTooltip, setErrorTooltip] = React.useState(false);
 
   //text in search
   const [inputValue, _setInputValue] = useState('');
@@ -73,7 +74,6 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
 
   //update parent and queries
   function onSelect_internal(newValue: SearchQuery | null) {
-    setErrorTooltip(!newValue);
     if (newValue) {
       void updateQueries(newValue);
     }
@@ -133,114 +133,91 @@ const SearchBar = ({ className, input_className, autoFocus }: SearchProps) => {
   }, []);
 
   return (
-    <div
-      className={
-        'flex items-center gap-2 w-full max-w-xs md:max-w-sm lg:max-w-md ' +
-        (className ?? '')
-      }
-    >
-      <Autocomplete
-        freeSolo
-        loading={loading}
-        //highlight first option to add with enter
-        autoHighlight={true}
-        clearOnBlur={false}
-        className="grow"
-        getOptionLabel={(option) => {
-          if (typeof option === 'string') {
-            return option;
-          }
-          return searchQueryLabel(option);
-        }}
-        options={options}
-        //don't filter options, done in fetch
-        filterOptions={(options) => options}
-        value={value}
-        onChange={(
-          event: React.SyntheticEvent,
-          newValue: string | SearchQuery | null,
-        ) => {
-          //should never happen
-          if (typeof newValue === 'string' || newValue === null) {
-            return;
-          }
-          updateValue(newValue);
-        }}
-        inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
-          loadNewOptions(newInputValue);
-        }}
-        renderInput={(params) => {
-          params.inputProps.onKeyDown = handleKeyDown;
-          return (
-            <TextField
-              {...params}
-              variant="outlined"
-              className={
-                '[&_.MuiOutlinedInput-root]:rounded-full [&_.MuiOutlinedInput-root]:bg-white [&_.MuiOutlinedInput-root]:dark:bg-neutral-700 ' +
-                (input_className ?? '')
-              }
-              placeholder="ex. GOVT 2306"
-              autoFocus={autoFocus}
-            />
-          );
-        }}
-        renderOption={(props: { key: Key }, option, { inputValue }) => {
-          const text =
-            typeof option === 'string' ? option : searchQueryLabel(option);
-          //add spaces between prefix and course number
-          const matches = match(
-            text,
-            inputValue
-              .replace(/([a-zA-Z]{2,4})([0-9][0-9V]?[0-9]{0,2})/, '$1 $2')
-              .replace(/([0-9][0-9V][0-9]{2})([a-zA-Z]{1,4})/, '$1 $2'),
-          );
+    <Autocomplete
+      freeSolo
+      loading={loading}
+      //highlight first option to add with enter
+      autoHighlight={true}
+      clearOnBlur={false}
+      className={'w-full max-w-xs md:max-w-sm lg:max-w-md ' + (className ?? '')}
+      getOptionLabel={(option) => {
+        if (typeof option === 'string') {
+          return option;
+        }
+        return searchQueryLabel(option);
+      }}
+      options={options}
+      //don't filter options, done in fetch
+      filterOptions={(options) => options}
+      value={value}
+      onChange={(
+        event: React.SyntheticEvent,
+        newValue: string | SearchQuery | null,
+      ) => {
+        //should never happen
+        if (typeof newValue === 'string' || newValue === null) {
+          return;
+        }
+        updateValue(newValue);
+      }}
+      inputValue={inputValue}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+        loadNewOptions(newInputValue);
+      }}
+      renderInput={(params) => {
+        params.inputProps.onKeyDown = handleKeyDown;
+        return (
+          <TextField
+            {...params}
+            variant="outlined"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment position="end" key="search-icon">
+                    <SearchIcon className="text-royal dark:text-cornflower-300" />
+                  </InputAdornment>
+                ),
+                className:
+                  'rounded-full bg-white dark:bg-neutral-700' +
+                  (input_className ?? ''),
+              },
+            }}
+            placeholder="Search for courses or professors"
+            autoFocus={autoFocus}
+          />
+        );
+      }}
+      renderOption={(props: { key: Key }, option, { inputValue }) => {
+        const text =
+          typeof option === 'string' ? option : searchQueryLabel(option);
+        //add spaces between prefix and course number
+        const matches = match(
+          text,
+          inputValue
+            .replace(/([a-zA-Z]{2,4})([0-9][0-9V]?[0-9]{0,2})/, '$1 $2')
+            .replace(/([0-9][0-9V][0-9]{2})([a-zA-Z]{1,4})/, '$1 $2'),
+        );
 
-          const parts = parse(text, matches);
-          const { key, ...otherProps } = props;
-          return (
-            <li key={key} {...otherProps}>
-              {parts.map((part, index) => (
-                <span
-                  key={index}
-                  className={
-                    'whitespace-pre-wrap' + (part.highlight ? ' font-bold' : '')
-                  }
-                >
-                  {part.text}
-                </span>
-              ))}
-            </li>
-          );
-        }}
-      />
-      <Tooltip
-        title="Select a course or professor before searching"
-        placement="top"
-        open={openErrorTooltip}
-        onOpen={() => setErrorTooltip(true)}
-        onClose={() => setErrorTooltip(false)}
-        disableFocusListener
-        disableHoverListener
-        disableTouchListener
-      >
-        <Button
-          variant="contained"
-          disableElevation
-          size="large"
-          className={
-            'h-11 w-[5.5rem] shrink-0 normal-case' +
-            (value === null
-              ? ' text-cornflower-200 dark:text-cornflower-700'
-              : '')
-          } //darkens the text when no valid search terms are entered (pseudo-disables the search button)
-          onClick={() => onSelect_internal(value)}
-        >
-          Search
-        </Button>
-      </Tooltip>
-    </div>
+        const parts = parse(text, matches);
+        const { key, ...otherProps } = props;
+        return (
+          <li key={key} {...otherProps}>
+            {parts.map((part, index) => (
+              <span
+                key={index}
+                className={
+                  'whitespace-pre-wrap' + (part.highlight ? ' font-bold' : '')
+                }
+              >
+                {part.text}
+              </span>
+            ))}
+          </li>
+        );
+      }}
+    />
   );
 };
 
