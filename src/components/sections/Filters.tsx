@@ -31,7 +31,7 @@ export default function HandwrittenFilter() {
         value={value}
         label="Note type"
         onChange={(e) => handleChange(e.target.value)}
-        className="bg-white dark:bg-neutral-900"
+        className="bg-white dark:bg-neutral-800"
       >
         <MenuItem value="">All Notes</MenuItem>
         <MenuItem value="true">Handwritten Only</MenuItem>

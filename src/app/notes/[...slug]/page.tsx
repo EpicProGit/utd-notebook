@@ -1,6 +1,6 @@
 import EmptyStateCard from '@src/components/sections/EmptyStateCard';
 import FilesGrid from '@src/components/sections/FilesGrid';
-import HandwrittenFilter from '@src/components/sections/HandwrittenFilter';
+import HandwrittenFilter from '@src/components/sections/Filters';
 import LinkCard from '@src/components/sections/LinkCard';
 import SectionHeader from '@src/components/sections/SectionHeader';
 import type { SectionWithFilesWithUserMetadata } from '@src/server/db/models';
@@ -114,9 +114,9 @@ function getCourseLinks(
 }
 
 function filterSections(
-  sections: SectionWithFiles[],
+  sections: SectionWithFilesWithUserMetadata[],
   handwritten: string | undefined,
-): SectionWithFiles[] {
+): SectionWithFilesWithUserMetadata[] {
   if (handwritten !== 'true' && handwritten !== 'false') return sections;
   const isHandwritten = handwritten === 'true';
   return sections.map((s) => ({
