@@ -7,10 +7,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState, type Key } from 'react';
-import {
-  searchQueryLabel,
-  type SearchQuery,
-} from '@src/modules/SearchQuery/SearchQuery';
+import { searchQueryLabel, type SearchQuery } from '@src/utils/SearchQuery';
 
 /**
  * api response type for autocomplete endpoint
