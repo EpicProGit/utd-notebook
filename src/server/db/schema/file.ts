@@ -1,12 +1,12 @@
 import { relations, sql } from 'drizzle-orm';
 import {
+  boolean,
   index,
   pgTable,
   text,
   timestamp,
   uniqueIndex,
   varchar,
-  boolean,
 } from 'drizzle-orm/pg-core';
 import { section } from './section';
 import { userMetadata } from './user';

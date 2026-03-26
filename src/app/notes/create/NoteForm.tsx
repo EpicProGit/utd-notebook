@@ -51,7 +51,7 @@ const NoteForm = ({ mode = 'create', file: existingFile }: NoteFormProps) => {
         name: existingFile.name,
         description: existingFile.description ?? '',
         section: '',
-        handwritten: existingFile.handwritten
+        handwritten: existingFile.handwritten,
       };
     }
     return {
@@ -59,7 +59,7 @@ const NoteForm = ({ mode = 'create', file: existingFile }: NoteFormProps) => {
       name: '',
       description: '',
       section: '',
-      handwritten: false
+      handwritten: false,
     };
   }, [mode, existingFile]);
 
@@ -223,9 +223,7 @@ const NoteForm = ({ mode = 'create', file: existingFile }: NoteFormProps) => {
               )}
               <form.AppField name="handwritten">
                 {(field) => (
-                  <field.Checkbox 
-                    label="Handwritten">
-                  </field.Checkbox>
+                  <field.Checkbox label="Handwritten"></field.Checkbox>
                 )}
               </form.AppField>
             </div>
