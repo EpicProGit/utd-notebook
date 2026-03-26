@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // fetch note ids
   const notes = (await api.file.byName({ name: '', sortByDate: true })).map(
-    (f) => [f.id],
+    (f) => [f.id, f.updatedAt],
   );
 
   // array of all possible note page slugs
@@ -44,9 +44,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })),
     // individual notes pages
-    ...notes.map((id) => ({
+    ...notes.map(([id, updatedAt]) => ({
       url: `${baseUrl}/notes/${id}`,
-      lastModified: new Date(),
+      lastModified: updatedAt,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
