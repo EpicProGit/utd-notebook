@@ -147,6 +147,7 @@ function addProfessor(
   profFirst: string,
   profLast: string,
   originalProf?: SearchQuery,
+  sectionStudents: number = 0,
 ) {
   //seperate first names so you can skip them when searching
   const firstNames = profFirst.split(' ');
@@ -156,11 +157,22 @@ function addProfessor(
     nodes.unshift(addSearchQueryCharacter(nodes[0] ?? '', name + ' '));
   }
   // if it is an alias, map the alias path to the original professor, else, just insert the professor as graph data
-  const data = originalProf ?? {
+  const data : SearchQueryWithTotalStudents = originalProf ?? {
     profFirst: profFirst,
     profLast: profLast,
   };
-  addWithParents(nodes, profLast, data);
+  
+  // saves the node with the data
+  const profNode = addWithParents(nodes, profLast, data);
+
+  // uses the prof node to update the student counter
+  graph.updateNodeAttribute(profNode, 'd', (prev) => {
+    const attrs = (prev ?? data) as SearchQueryWithTotalStudents;
+    return {
+      ...attrs,
+      totalStudents: (attrs.totalStudents ?? 0) + sectionStudents,
+    };
+  });
 }
 
 for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
@@ -191,6 +203,8 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
       ) {
         const sectionData = academicSessionData.sections[sectionItr];
         if (!sectionData) continue; //handle blank data
+
+        const uniqueProfessorSet = new Set<string>();
         courseStudents += sectionData.totalStudents ?? 0;
         for (
           let professorItr = 0;
@@ -205,7 +219,18 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
             professorData.first_name !== '' && //handle blank name
             professorData.last_name !== ''
           ) {
-            addProfessor(professorData.first_name!, professorData.last_name!);
+            if (!professorData.first_name || !professorData.last_name) continue;
+            const uniqueSetKey = `${professorData.first_name}|${professorData.last_name}`;
+            if (uniqueProfessorSet.has(uniqueSetKey)) {
+              continue;
+            }
+            uniqueProfessorSet.add(uniqueSetKey);
+            addProfessor(
+              professorData.first_name,
+              professorData.last_name,
+              undefined,
+              sectionData.totalStudents ?? 0,
+            );
           }
         }
       }
