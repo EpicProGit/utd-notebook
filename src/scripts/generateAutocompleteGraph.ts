@@ -16,6 +16,7 @@ interface ProfessorData {
 
 interface SectionData {
   professors: ProfessorData[];
+  totalStudents?: number;
 }
 
 interface AcademicSessionData {
@@ -30,6 +31,10 @@ interface CourseNumberData {
 interface PrefixData {
   subject_prefix: string;
   course_numbers: CourseNumberData[];
+}
+
+type SearchQueryWithTotalStudents = SearchQuery & {
+  totalStudents?: number;
 }
 
 // tell compiler that aggregatedData DOES have data member
