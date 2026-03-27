@@ -103,7 +103,7 @@ function addWithParents(
   //main parent must be first!!! Otherwise can lead to accessing unmatched data like typing GEOS 2305 CE and getting ce2305 because it looped back
   nodes: string[],
   characters: string,
-  data?: SearchQuery,
+  data?: SearchQueryWithTotalStudents,
 ) {
   const nodeFirstChar = addSearchQueryCharacter(
     nodes.shift() as string,
@@ -174,6 +174,7 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
   ) {
     const courseNumberData = prefixData.course_numbers[courseNumberItr];
     if (!courseNumberData) continue; //handle blank data
+    let courseStudents = 0;
     addCourse(prefixData.subject_prefix, courseNumberData.course_number);
     for (
       let academicSessionItr = 0;
@@ -190,6 +191,7 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
       ) {
         const sectionData = academicSessionData.sections[sectionItr];
         if (!sectionData) continue; //handle blank data
+        courseStudents += sectionData.totalStudents ?? 0;
         for (
           let professorItr = 0;
           professorItr < sectionData.professors.length;
