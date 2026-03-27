@@ -35,7 +35,7 @@ interface PrefixData {
 
 type SearchQueryWithTotalStudents = SearchQuery & {
   totalStudents?: number;
-}
+};
 
 // tell compiler that aggregatedData DOES have data member
 const aggregatedData = aggregatedDataRaw as { data: PrefixData[] };
@@ -157,11 +157,11 @@ function addProfessor(
     nodes.unshift(addSearchQueryCharacter(nodes[0] ?? '', name + ' '));
   }
   // if it is an alias, map the alias path to the original professor, else, just insert the professor as graph data
-  const data : SearchQueryWithTotalStudents = originalProf ?? {
+  const data: SearchQueryWithTotalStudents = originalProf ?? {
     profFirst: profFirst,
     profLast: profLast,
   };
-  
+
   // saves the node with the data
   const profNode = addWithParents(nodes, profLast, data);
 
