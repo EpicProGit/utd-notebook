@@ -124,13 +124,14 @@ function addWithParents(
 
 //Add node in format: <prefix>[<number>| <number>[.<section>]
 //and: (<number>|<number> )<prefix>[.<section>]
-function addCourse(prefix: string, number: string) {
+function addCourse(prefix: string, number: string, courseStudents: number) {
   //<prefix>[ ]<number>
   const prefixNode = addSearchQueryCharacter(root, prefix);
   const prefixSpaceNode = addSearchQueryCharacter(prefixNode, ' ');
   addWithParents([prefixNode, prefixSpaceNode], number, {
     prefix: prefix,
     number: number,
+    totalStudents: courseStudents,
   });
 
   //<number>[ ]<prefix>
@@ -139,6 +140,7 @@ function addCourse(prefix: string, number: string) {
   addWithParents([classNode2, classSpaceNode], prefix, {
     prefix: prefix,
     number: number,
+    totalStudents: courseStudents,
   });
 }
 
@@ -187,7 +189,6 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
     const courseNumberData = prefixData.course_numbers[courseNumberItr];
     if (!courseNumberData) continue; //handle blank data
     let courseStudents = 0;
-    addCourse(prefixData.subject_prefix, courseNumberData.course_number);
     for (
       let academicSessionItr = 0;
       academicSessionItr < courseNumberData.academic_sessions.length;
@@ -235,6 +236,11 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
         }
       }
     }
+    addCourse(
+      prefixData.subject_prefix,
+      courseNumberData.course_number,
+      courseStudents,
+    );
   }
 }
 
