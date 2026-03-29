@@ -8,7 +8,7 @@ export type SearchQuery = {
 
 export type SearchQueryWithTotalStudents = SearchQuery & {
   total_students?: number;
-}
+};
 
 export type Professor = {
   profFirst: string;

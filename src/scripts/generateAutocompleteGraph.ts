@@ -7,7 +7,11 @@ import { writeFileSync } from 'fs';
 import { DirectedGraph } from 'graphology';
 import aggregatedDataRaw from '../data/aggregated_data.json';
 import professor_to_alias from '../data/professor_to_alias.json';
-import { decodeSearchQueryLabel, type SearchQuery, type SearchQueryWithTotalStudents } from '../utils/SearchQuery';
+import {
+  decodeSearchQueryLabel,
+  type SearchQuery,
+  type SearchQueryWithTotalStudents,
+} from '../utils/SearchQuery';
 
 interface ProfessorData {
   first_name?: string;
