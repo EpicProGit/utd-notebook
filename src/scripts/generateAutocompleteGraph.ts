@@ -7,7 +7,7 @@ import { writeFileSync } from 'fs';
 import { DirectedGraph } from 'graphology';
 import aggregatedDataRaw from '../data/aggregated_data.json';
 import professor_to_alias from '../data/professor_to_alias.json';
-import { decodeSearchQueryLabel, type SearchQuery } from '../utils/SearchQuery';
+import { decodeSearchQueryLabel, type SearchQuery, type SearchQueryWithTotalStudents } from '../utils/SearchQuery';
 
 interface ProfessorData {
   first_name?: string;
@@ -16,7 +16,7 @@ interface ProfessorData {
 
 interface SectionData {
   professors: ProfessorData[];
-  totalStudents?: number;
+  total_students?: number;
 }
 
 interface AcademicSessionData {
@@ -33,16 +33,12 @@ interface PrefixData {
   course_numbers: CourseNumberData[];
 }
 
-type SearchQueryWithTotalStudents = SearchQuery & {
-  totalStudents?: number;
-};
-
 // tell compiler that aggregatedData DOES have data member
 const aggregatedData = aggregatedDataRaw as { data: PrefixData[] };
 
 export type NodeAttributes = {
   c: string;
-  d?: SearchQuery;
+  d?: SearchQueryWithTotalStudents;
   visited?: boolean;
 };
 
@@ -61,7 +57,7 @@ const root = graph.addNode(numNodes++, {
 function addSearchQueryCharacter(
   node: string,
   characters: string,
-  data?: SearchQuery,
+  data?: SearchQueryWithTotalStudents,
 ): string {
   characters = characters.toUpperCase();
   const preExisting = graph.findOutNeighbor(
@@ -131,7 +127,7 @@ function addCourse(prefix: string, number: string, courseStudents: number) {
   addWithParents([prefixNode, prefixSpaceNode], number, {
     prefix: prefix,
     number: number,
-    totalStudents: courseStudents,
+    total_students: courseStudents,
   });
 
   //<number>[ ]<prefix>
@@ -140,7 +136,7 @@ function addCourse(prefix: string, number: string, courseStudents: number) {
   addWithParents([classNode2, classSpaceNode], prefix, {
     prefix: prefix,
     number: number,
-    totalStudents: courseStudents,
+    total_students: courseStudents,
   });
 }
 
@@ -172,7 +168,7 @@ function addProfessor(
     const attrs = (prev ?? data) as SearchQueryWithTotalStudents;
     return {
       ...attrs,
-      totalStudents: (attrs.totalStudents ?? 0) + sectionStudents,
+      total_students: (attrs.total_students ?? 0) + sectionStudents,
     };
   });
 }
@@ -206,7 +202,7 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
         if (!sectionData) continue; //handle blank data
 
         const uniqueProfessorSet = new Set<string>();
-        courseStudents += sectionData.totalStudents ?? 0;
+        courseStudents += sectionData.total_students ?? 0;
         for (
           let professorItr = 0;
           professorItr < sectionData.professors.length;
@@ -230,7 +226,7 @@ for (let prefixItr = 0; prefixItr < aggregatedData.data.length; prefixItr++) {
               professorData.first_name,
               professorData.last_name,
               undefined,
-              sectionData.totalStudents ?? 0,
+              sectionData.total_students ?? 0,
             );
           }
         }
