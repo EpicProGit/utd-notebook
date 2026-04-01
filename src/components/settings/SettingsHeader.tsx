@@ -17,7 +17,7 @@ export default function SettingsHeader({ user }: SettingsHeaderProps) {
               Settings
             </h1>
             <span className="text-xl max-sm:text-lg max-sm:text-center text-white opacity-80">
-              Manage your account preferences
+              Manage your account preferences and followed notebooks
             </span>
           </div>
           {user?.image && (
