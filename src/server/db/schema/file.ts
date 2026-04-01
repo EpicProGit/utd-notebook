@@ -29,8 +29,6 @@ export const file = pgTable(
     name: text('name').notNull(),
     description: text('description'),
 
-    handwritten: boolean().notNull().default(false),
-
     publicUrl: text('public_url').notNull(),
 
     handwritten: boolean('handwritten').notNull().default(false),
