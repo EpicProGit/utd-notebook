@@ -33,6 +33,8 @@ export const file = pgTable(
 
     publicUrl: text('public_url').notNull(),
 
+    handwritten: boolean('handwritten').notNull().default(false),
+
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   },
   (t) => [
